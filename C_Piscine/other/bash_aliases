@@ -1,0 +1,9 @@
+
+	alias cl='clear'
+	alias rm='rm -i'
+	alias ll='ls -l'
+	alias la='ls -a'
+	alias l='ls -alF'
+
+	alias gcc='gcc -Wall -Wextra -Werror'
+	alias norminette='norminette -R CheckForbiddenSourceHeader -R CheckDefine'
