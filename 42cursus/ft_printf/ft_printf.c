@@ -54,7 +54,7 @@ count: Reference to the printed character counter.
 Do switch-case for actually printing passed arguments and 
 increment the counter.
 */
-void	switch_case(char c, va_list ap, ssize_t * count)
+void	switch_case(char c, va_list ap, ssize_t *count)
 {
 	if (c == 'c')
 		case_char(va_arg(ap, int), count);
