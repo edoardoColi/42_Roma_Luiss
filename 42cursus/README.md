@@ -4,7 +4,7 @@ Marzo 2022 - now
   
 **Tip:**  
 Per evitare di scaricare tutta la reporitorie si puo' utilizzare *subversion* tramite il comando:  
-`svn checkout https://github.com/edoardoColi/42_Roma_Luiss/trunk/42cursus/<project>`  
+`svn checkout https://github.com/edoardoColi/42_Roma_Luiss.priv/trunk/42cursus/<project>`  
 e specificare la cartella che si vuole al posto di \<project\>.
 |Progetto|Percentuale Completamento|Valore|Linguaggio|
 |:------:|:-----------------------:|:----:|:--------:|
