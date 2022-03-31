@@ -22,4 +22,3 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap)|Asap|1855 XP||
 |[Exam Rank 02](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_02)|Asap|||
 |||||
-ciao

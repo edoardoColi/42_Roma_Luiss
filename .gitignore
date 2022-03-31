@@ -1,6 +1,5 @@
 **/.DS_Store
 **/.[^.]*
-**/README.md
 
 #Non ignora i segnati
 C_Piscine/*
@@ -9,6 +8,7 @@ C_Piscine/*
 #Non ignorare i completati
 42cursus/*
 !README.md
+!42cursus/README.md
 !42cursus/Libft
 !42cursus/get_next_line
 !42cursus/ft_printf
