@@ -11,7 +11,7 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |[Libft](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Libft)| 125%:heavy_check_mark:|462 XP|C,Make|
 |||||
 |[Born2beroot](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Born2beroot)|In Progress :fast_forward:|577 XP|Shell|
-|[ft_printf](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_printf)|In Progress :fast_forward:|882 XP|C,Make|
+|[ft_printf](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_printf)|100% :heavy_check_mark:|882 XP|C,Make|
 |[get_next_line](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/get_next_line)|100% :heavy_check_mark:|882 XP|C|
 |||||
 |[so_long](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/so_long)|Asap|1000 XP||
