@@ -21,12 +21,12 @@ count: Reference to the printed character counter.
 Print the number in lowercase hexadecimal and increments 
 the counter for each character printed.
 */
-void	case_hex_lowcase(unsigned int xlo, ssize_t * count)
+void	case_hex_lowcase(unsigned int xlo, ssize_t *count)
 {
 	unsigned long	xlo_long;
 	int				l;
 
-	if(!xlo)
+	if (!xlo)
 		write(out, "0", 1);
 	xlo_long = (unsigned long) xlo;			//Converted to format as the manual says, unsigned hexadecimal notation
 	l = size_num(xlo_long);
