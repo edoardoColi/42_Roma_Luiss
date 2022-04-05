@@ -7,8 +7,8 @@ C_Piscine/*
 
 #Non ignorare i completati
 42cursus/*
-!README.md
-!42cursus/README.md
+README.md
+42cursus/README.md
 !42cursus/Libft
 !42cursus/get_next_line
 !42cursus/ft_printf
