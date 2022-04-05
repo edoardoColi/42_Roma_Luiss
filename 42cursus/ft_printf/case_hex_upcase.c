@@ -46,7 +46,7 @@ static void	putnbr_itr(unsigned long n)
 	hexadecimal = "0123456789ABCDEF";
 	if (n != 0)
 	{
-		tmp = hexadecimal[(n % 16)];		//We take the offset and use it in the reference string
+		tmp = hexadecimal[(n % 16)];		//We take the offset and use it in the reference strin
 		putnbr_itr(n / 16);
 		write(out, &tmp, 1);
 	}

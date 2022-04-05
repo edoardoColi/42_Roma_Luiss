@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eddy_0 <eddy_0@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ecoli <ecoli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 10:59:43 by ecoli             #+#    #+#             */
-/*   Updated: 2022/03/19 14:19:05 by eddy_0           ###   ########.fr       */
+/*   Updated: 2022/04/05 22:11:32 by ecoli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
 /*
 My own function implementing the original one.
 For more use "man strnstr" 

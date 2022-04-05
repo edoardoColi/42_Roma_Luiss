@@ -21,7 +21,7 @@ count: Reference to the printed character counter.
 Print the number in hexadecimal and increments 
 the counter for each character printed.
 */
-void	case_void(void *p, ssize_t *count)
+void	case_void(void * p, ssize_t *count)
 {
 	unsigned long	p_long;
 	int				l;
