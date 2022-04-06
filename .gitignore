@@ -3,8 +3,7 @@
 
 #I Readme devono essere aggiunti con la add manualmente
 README.md
-42cursus/README.md
-C_Piscine/README.md
+**/README.md
 
 #Non ignora i segnati
 C_Piscine/*
