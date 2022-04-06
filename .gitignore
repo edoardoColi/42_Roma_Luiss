@@ -2,8 +2,8 @@
 **/.[^.]*
 
 #I Readme devono essere aggiunti con la add manualmente
-*.md
-**/*.md
+README.md
+**/README.md
 
 #Non ignora i segnati
 C_Piscine/*
