@@ -16,6 +16,6 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |||||
 |[fract-ol](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/fract-ol)|In Progress :fast_forward:|1000 XP|C,Make|
 |[minitalk](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/minitalk)|In Progress :fast_forward:|1142 XP|C,Make|
-|[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap)|Asap|In Progress :fast_forward:|1855 XP|C,Make|
+|[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap)|In Progress :fast_forward:|1855 XP|C,Make|
 |[Exam Rank 02](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_02)|In Progress :fast_forward:||C|
 |||||
