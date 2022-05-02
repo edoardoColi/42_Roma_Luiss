@@ -52,7 +52,7 @@ dnf install -y epel-release
 dnf install --enablerepo="epel" -y ufw
 dnf install vsftpd
 ```
-DNF è un nuovo packet manager disponibile su _fedora_ dalla versione 18. Ha l'obiettivo di rimpiazzare `yum` nel lungo periodo. Essendo `dnf` un fork di _yum_ vengono mantenuti tutti i vecchi comandi avendo però prestazioni migliori.  
+DNF è un nuovo packet manager disponibile su _fedora_ dalla versione 18. Ha l'obiettivo di rimpiazzare `yum` nel lungo periodo. Essendo `dnf` un fork di _dnf_ vengono mantenuti tutti i vecchi comandi avendo però prestazioni migliori.  
 I vari comandi lanciati durante la guida vengono interpretati come eseguiti dall'utente root.
 
 ## Logical Volume Manager (LVM)
@@ -70,7 +70,7 @@ nano /etc/sysconfig/selinux
 Per controllare lo stato di SELinux possiamo usare `getenforce`, oppure `sestatus` per un output piu verboso.  
 
 ## Secure SHell (SSH)
-Per verificare che il Secure Shell protocoll sia attivo possiamo verificare lo stato del servizio tramite `systemctl status sshd` e verifichiamo ci sia scritto _"active(running)"_. Nel caso non sia installato possiamo rimediare lanciando `yum install openssh-server`.  
+Per verificare che il Secure Shell protocoll sia attivo possiamo verificare lo stato del servizio tramite `systemctl status sshd` e verifichiamo ci sia scritto _"active(running)"_. Nel caso non sia installato possiamo rimediare lanciando `dnf install openssh-server`.  
 Ora che il servizio é presente impostiamo i vari parametri nel file di configuraazione `/etc/ssh/sshd_config` :
 - Evitiamo che si possa accedere da remoto come root settando il parametro `PermitRootLogin` da **yes** a **no** oppure levando il commento alla riga
 ```
@@ -90,7 +90,7 @@ ci possiamo collegare da un terminale esterno con `ssh <username>@<ip> -p <port>
 
 ## Uncomplicated FireWall (UFW)
 Utilizziamo il Uncomplicated FireWall per controllare il traffico in entrata e in uscita del dispositivo, per farlo dobbiamo impostare delle regole di firewall.  
-Dopo averlo installato con `yum install -y epel-release` e `yum install --enablerepo="epel" -y ufw` dobbiamo attivarlo con `ufw enable` poi controllare con `ufw status`, inoltre dobbiamo abilitare l'esecuzione durante l'accensione con `systemctl enable ufw`.  
+Dopo averlo installato con `dnf install -y epel-release` e `dnf install --enablerepo="epel" -y ufw` dobbiamo attivarlo con `ufw enable` poi controllare con `ufw status`, inoltre dobbiamo abilitare l'esecuzione durante l'accensione con `systemctl enable ufw`.  
 Il file di configurazione é `/etc/default/ufw`, all'interno del quale possiamo specificare alla voce IPV6 se supportarlo `IPV6=yes` oppure no `IPV6=no`.  
 Dato che vogliamo avere solo la regola relativa alla porta 4242 cancelliamo tutte le altre con `ufw delete NUM` dove NUM corrisponde alla riga della regola come descritto dal comando `ufw status numbered`.  
 Inizziamo ad aggiungere delle restrizioni bloccando tutto il traffico in ingresso `ufw default deny incoming` e consentendo tutto quello in uscita `ufw default allow outgoing`. Possiamo aggiungere una regola che consente/blocchi il traffico per uno specifico servizio come `ufw allow/deny ssh` oppure `ufw allow/deny https`; possiamo aggiungere anche regole per porte specifiche come `ufw allow/deny 4242`; possiamo utilizzare [diverse conbinazioni](https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands) in base alle nostre esigenze.  
@@ -202,7 +202,7 @@ SHELL=/bin/sh
 # /path/to deve essere modificato in base a dove si trova il file contenente lo script
 */10 * * * * /path/to/cronscript.sh
 ```
-Se lo script necessita di alcuni comandi specifici relativi alle reti possiamo installarli con l'aiuto di yum.  
+Se lo script necessita di alcuni comandi specifici relativi alle reti possiamo installarli con l'aiuto di dnf.  
 Per maggiorni dettagli consultare il manuale `man crontab`.  
 
 ## Bonus Project Part
@@ -212,7 +212,7 @@ Jumped
 ```
 ### FTP Service
 Il File Transfer Protocol è un protocollo che permette di caricare e scaricare file in modo facile.  
-Per instalare queesto servizio utilizziamo il comando `yum install vsftpd`, installiamo cosi il Very Secure FTP Daemon. Per avviare il servizio usiamo `systemctl start vsftpd` e affinche sia abilitata l'esecuzione durante l'accensione lanciamo `systemctl enable vsftpd`.  
+Per instalare queesto servizio utilizziamo il comando `dnf install vsftpd`, installiamo cosi il Very Secure FTP Daemon. Per avviare il servizio usiamo `systemctl start vsftpd` e affinche sia abilitata l'esecuzione durante l'accensione lanciamo `systemctl enable vsftpd`.  
 Per verificare lo stato del servizio usiamo `systemctl status vsftpd`.  
 Impostiamo i vari parametri si ricurezza del servizio modificando `/etc/vsftpd/vsftp.conf`  
 Consentiamo di usare il servizio solo agli utenti locali impostando
