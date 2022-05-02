@@ -1,29 +1,29 @@
 **/.DS_Store
 **/.[^.]*
 
-#I Readme devono essere aggiunti con la add manualmente
-README.md
-**/README.md
-##tuttavia non funziona...boh
-
-#Non ignora i segnati
-C_Piscine/*
-!C_Piscine/other
-
-#Non ignorare i completati
-42cursus/*
-!42cursus/Libft
-!42cursus/get_next_line
-!42cursus/ft_printf
-
-#Ignorati ma in progresso
-42cursus/Born2beroot
-42cursus/push_swap
-
-#Prossimo cerchio completo
-42cursus/Exam_Rank_02
-42cursus/FdF
-42cursus/fract-ol
-42cursus/so_long
-42cursus/pipex
-42cursus/minitalk
+##I Readme devono essere aggiunti con la add manualmente
+#README.md
+#**/README.md
+###tuttavia non funziona...boh
+#
+##Non ignora i segnati
+#C_Piscine/*
+#!C_Piscine/other
+#
+##Non ignorare i completati
+#42cursus/*
+#!42cursus/Libft
+#!42cursus/get_next_line
+#!42cursus/ft_printf
+#
+##Ignorati ma in progresso
+#42cursus/Born2beroot
+#42cursus/push_swap
+#
+##Prossimo cerchio completo
+#42cursus/Exam_Rank_02
+#42cursus/FdF
+#42cursus/fract-ol
+#42cursus/so_long
+#42cursus/pipex
+#42cursus/minitalk

@@ -10,15 +10,15 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |:------:|:-----------------------:|:----:|:--------:|
 |[Libft](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Libft)| 125%:heavy_check_mark:|462 XP|C,Make|
 |||||
-|[Born2beroot](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Born2beroot)|In Progress :fast_forward:|577 XP|Shell|
+|[Born2beroot](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Born2beroot)|115% :heavy_check_mark:|577 XP|Shell|
 |[ft_printf](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_printf)|100% :heavy_check_mark:|882 XP|C,Make|
 |[get_next_line](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/get_next_line)|100% :heavy_check_mark:|882 XP|C|
 |||||
-|[so_long](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/so_long)|Asap|1000 XP||
-|[fract-ol](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/fract-ol)|Asap|1000 XP||
-|[FdF](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/FdF)|Asap|1000 XP||
-|[minitalk](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/minitalk)|Asap|1142 XP||
-|[pipex](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/pipex)|Asap|1142 XP||
-|[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap)|Asap|1855 XP||
-|[Exam Rank 02](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_02)|Asap|||
+# |[so_long](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/so_long)|Asap|1000 XP||
+# |[fract-ol](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/fract-ol)|Asap|1000 XP||
+# |[FdF](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/FdF)|Asap|1000 XP||
+# |[minitalk](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/minitalk)|Asap|1142 XP||
+# |[pipex](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/pipex)|Asap|1142 XP||
+|[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap)|Asap|In Progress :fast_forward:|1855 XP|C,Make|
+|[Exam Rank 02](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_02)|In Progress :fast_forward:||C|
 |||||
