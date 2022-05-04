@@ -26,7 +26,7 @@ L'immagine di sistema puó essere utilizzata sia all'interno di una macchina vir
 ## Installation
 Nel caso si presentasse l'errore `FATAL: No bootable medium found! System halted` l'immagine di sistama non è stata caricata correttamente.  
 Nella schermata iniziale installare CentOs selezionando la voce `Install CentOS Stream 8-stream`, partirà l'installazione e chiederà di inserire alcuni parametri di setup.  
-<img src=https://github.com/edoardoColi/42_Roma_Luiss.priv/blob/edoardoColi/42cursus/Born2beroot/Installer.png width="60%" height="60%">
+<img src=https://github.com/edoardoColi/42_Roma_Luiss/blob/edoardoColi/42cursus/Born2beroot/Installer.png width="60%" height="60%">
 ```
 USER SETTINGS > impostare la password per root
 SYSTEM 	      > Network & Host Name      > selezionare e attivare una rete
