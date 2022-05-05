@@ -10,11 +10,11 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |:------:|:-----------------------:|:----:|:--------:|
 |[Libft](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Libft/en.subject.pdf)| 125%:heavy_check_mark:|462 XP|C,Make|
 |||||
-|[Born2beroot](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Born2beroot)|115% :heavy_check_mark:|577 XP|Shell|
-|[ft_printf](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_printf)|100% :heavy_check_mark:|882 XP|C,Make|
-|[get_next_line](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/get_next_line)|100% :heavy_check_mark:|882 XP|C|
+|[Born2beroot](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Born2beroot/en.subject.pdf)|115% :heavy_check_mark:|577 XP|Shell|
+|[ft_printf](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_printf/en.subject.pdf)|100% :heavy_check_mark:|882 XP|C,Make|
+|[get_next_line](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/get_next_line/en.subject.pdf)|100% :heavy_check_mark:|882 XP|C|
 |||||
-|[fract-ol](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/fract-ol)|In Progress :fast_forward:|1000 XP|C,Make|
-|[minitalk](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/minitalk)|In Progress :fast_forward:|1142 XP|C,Make|
-|[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap)|In Progress :fast_forward:|1855 XP|C,Make|
+|[fract-ol](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/fract-ol/en.subject.pdf)|In Progress :fast_forward:|1000 XP|C,Make|
+|[minitalk](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/minitalk/en.subject.pdf)|In Progress :fast_forward:|1142 XP|C,Make|
+|[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap/en.subject.pdf)|In Progress :fast_forward:|1855 XP|C,Make|
 |||||
