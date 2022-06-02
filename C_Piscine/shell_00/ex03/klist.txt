@@ -1,0 +1,6 @@
+Credentials cache: API:C7FBD6A0-85AA-4D71-B941-278810452643
+        Principal: ecoli@42ROMA.IT
+
+  Issued                Expires               Principal
+Dec  1 19:02:14 2021  Dec  2 05:02:14 2021  krbtgt/42ROMA.IT@42ROMA.IT
+Dec  1 19:02:17 2021  Dec  2 05:02:14 2021  HTTP/storage.42roma.it@42ROMA.IT

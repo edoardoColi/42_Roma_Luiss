@@ -1,0 +1,43 @@
+0: Stupid
+1: "No.
+2: be with you"
+3: "The Force
+4: Good luck!
+5: "Do.
+6: !
+7: Only good vides
+8: Obi-Wan Kenobi
+9: Unlimited power!" Darth Sidius
+10: Doggo Sitter
+11: Darth Vader
+12: Yoda
+13: Obi-Wan Kenobi
+14: Dark Vater
+15: I need u
+16: Obi
+17: ?
+18: Yes
+19: Dont
+20: Do not.
+30: Have
+40: "May the force
+50: Be
+60: Man
+70: "Hello there"
+80: Girls
+90: "Power!
+100: I am your father."
+1000: Or do not. There is no try."
+1000000: will be with you. Always."
+1000000000: No way
+1000000000000: Out
+1000000000000000: In
+1000000000000000000: Exit
+1000000000000000000000: Top
+1000000000000000000000000: Better
+1000000000000000000000000000: Go
+1000000000000000000000000000000: Eat
+1000000000000000000000000000000000: Drink
+1000000000000000000000000000000000000: Finish
+
+ 
