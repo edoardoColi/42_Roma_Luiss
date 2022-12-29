@@ -3,7 +3,7 @@
 
 Per maggioni informazioni visitare [42 Roma Luiss](https://42roma.it/).
 
-Link Utili:
+Link Utili:  
 Il mio percorso delle [Piscine C](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/C_Piscine).  
 Il mio [cursus 42](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus).  
 
