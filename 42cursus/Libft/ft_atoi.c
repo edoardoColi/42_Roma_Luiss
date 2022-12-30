@@ -14,7 +14,7 @@
 
 /*
 My own function implementing the original one.
-For more use "man _atoi" 
+For more use "man atoi" 
 */
 int	ft_atoi(const char *str)
 {
