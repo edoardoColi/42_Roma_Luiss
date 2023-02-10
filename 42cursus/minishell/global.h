@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   global.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ecoli <ecoli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:39 by ecoli             #+#    #+#             */
-/*   Updated: 2023/02/07 02:07:19 by eddy             ###   ########.fr       */
+/*   Updated: 2023/02/10 18:08:05 by ecoli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,13 @@ enum e_io {
 
 typedef struct s_command
 {
-	char	args[1024][2048];
-	int		ret;
-	int		err;
+	char	**args;
+	char	**rdr_in;	// <
+	char	**rdr_out;	// >
+	char	**heredoc;	// <<
+	char	**append;	// >>
+	int		ret;		//return del comando
+	int		err;		//errorno
 }	t_command;
 
 #endif
