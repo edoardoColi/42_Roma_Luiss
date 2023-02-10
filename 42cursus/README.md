@@ -20,3 +20,7 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap/en.subject.pdf)|83% :heavy_check_mark:|1855 XP|C,Make|
 |[Exam Rank 02](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_02)|:heavy_check_mark:||C|
 |||||
+|[minishell](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/minishell)|In Progress :fast_forward:|2814 XP|C,Make|
+|[Philosophers](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Philosophers)|In Progress :fast_forward:|3360 XP|C,Make|
+|[Exam Rank 03](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_03)|In Progress :fast_forward:||C|
+|||||
