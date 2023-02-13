@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ecoli <ecoli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/02/07 03:21:56 by eddy             ###   ########.fr       */
+/*   Updated: 2023/02/13 20:10:10 by ecoli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ struct sigaction {
 	void (*sa_restorer)(void);
 }
 */
-int	main(int argc, char *argv[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	struct sigaction	act;
 	char				*in_line;
@@ -58,7 +58,7 @@ printf("in_line = %s\n",in_line);
 			add_history(in_line);
 			ret_val = analyzer(in_line, &n_cmd);
 			if (ret_val == 0)
-				ret_val = parser(in_line, &n_cmd);
+				ret_val = parser(in_line, &n_cmd, envp);
 		}
 		else
 			ret_val = 0;
@@ -93,7 +93,6 @@ static void	handler(int sig, siginfo_t *siginfo, void *context)
 	if (sig == SIGINT)//codice 2
 	{
 		printf("Premuto ctrl-C\n");//da cambiare con quello che devono effetivamente fare
-exit(0);
 	}
 	if (sig == SIGQUIT)//codice 3
 	{
@@ -130,7 +129,6 @@ static void	do_ps1(char *ps1, size_t len, int mod)
 	ft_memset(ps1, '\0', len);
 	user = getenv("USER");
 	pwd = getenv("PWD");
-	desktop_session = getenv("DESKTOP_SESSION");
 	i = -1;
 	if (mod == 0)
 		i += insert_ps1(ps1, i + 1, "\U0001F607");//emoji angel face
@@ -142,8 +140,6 @@ static void	do_ps1(char *ps1, size_t len, int mod)
 		ps1[i] = user[j];
 	ps1[i] = '@'; //cosi non devo fare -1 a i
 	j = -1;
-	while (++i < len && desktop_session[++j] != '\0')
-		ps1[i] = desktop_session[j];
 	i += insert_ps1(ps1, i, "\033[1;00m");//grassetto e colore bianco
 	ps1[i] = ':';
 	i += insert_ps1(ps1, i + 1, "\033[1;34m");//grassetto e colore blu

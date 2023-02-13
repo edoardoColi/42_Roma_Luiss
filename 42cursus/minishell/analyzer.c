@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   analyzer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ecoli <ecoli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/02/07 00:55:01 by eddy             ###   ########.fr       */
+/*   Updated: 2023/02/13 16:07:04 by ecoli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		analyzer(char *cmd, int *n_cmd)
 	*n_cmd = 1;
 	while (cmd[pos] != '\0')
 	{//lista dei caratteri speciali
-		if (cmd[pos] == '!' ||	//Used for history expansion and negation of commands
+		if ((cmd[pos] == '!' ||	//Used for history expansion and negation of commands
 			cmd[pos] == '#' ||	//Used to start a comment
 			cmd[pos] == ';' ||	//used to separate commands on the same line
 			//&& and multipli non sono gestiti perche sotto caso di &
@@ -45,14 +45,15 @@ int		analyzer(char *cmd, int *n_cmd)
 			cmd[pos] == '[' ||	//Used to test attributes of files in test commands
 			cmd[pos] == ']' ||	//Used to test attributes of files in test commands
 			cmd[pos] == '{' ||	//Used to execute a list of commands in a subshell
-			cmd[pos] == '}')		//Used to execute a list of commands in a subshell
+			cmd[pos] == '}') && //Used to execute a list of commands in a subshell
+			quotes_rep % 2 == 0 && quote_rep % 2 == 0) //possono essere usati se interni alle quotes
 		{
-			printf("minischell: special caracter (%c) unhandled\n",cmd[pos]);//gestiti singolarmente questi caratteri speciali $ > < | << >> ' "
+			printf("minischell: special caracter (%c) unhandled\n\n",cmd[pos]);//gestiti singolarmente questi caratteri speciali $ > < | << >> ' "
 			return (2);
 		}
-		tmp = 0;//controllo per |
-		or_rep = -1;
-		if(cmd[pos] == '|')
+		or_rep = -1;//controllo per |
+		tmp = 0;
+		if(cmd[pos] == '|' && quotes_rep % 2 == 0 && quote_rep % 2 == 0)
 		{
 			*n_cmd = *n_cmd + 1;
 			or_rep = 0;
@@ -90,9 +91,9 @@ int		analyzer(char *cmd, int *n_cmd)
 			printf("minischell: syntax error near unexpected token `|'\n");
 			return (2);
 		}
-		tmp = 0;		//controllo per >
-		greater_rep = -1;
-		if(cmd[pos] == '>')
+		greater_rep = -1;//controllo per >
+		tmp = 0;
+		if(cmd[pos] == '>' && quotes_rep % 2 == 0 && quote_rep % 2 == 0)
 		{
 			greater_rep = 0;
 			while (cmd[pos] != '\0')
@@ -129,9 +130,9 @@ int		analyzer(char *cmd, int *n_cmd)
 			printf("minischell: syntax error near unexpected token `>>'\n");
 			return (2);
 		}
-		tmp = 0;		//controllo per <
-		less_rep = -1;
-		if(cmd[pos] == '<')
+		less_rep = -1;		//controllo per <
+		tmp = 0;
+		if(cmd[pos] == '<' && quotes_rep % 2 == 0 && quote_rep % 2 == 0)
 		{
 			less_rep = 0;
 			while (cmd[pos] != '\0')

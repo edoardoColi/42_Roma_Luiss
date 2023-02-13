@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ecoli <ecoli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/02/07 04:18:41 by eddy             ###   ########.fr       */
+/*   Updated: 2023/02/13 20:29:37 by ecoli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,132 +15,184 @@
 
 /*
 */
-int		parser(char *cmd, int *n_cmd)
+int		parser(char *cmds, int *n_cmds, char *envp[])
 {
 	int			i;
 	char		*path;
 	t_command	**command;
 
-	printf("parso: %s\n",cmd);
+	printf("parso: %s\n",cmds);
 
-	command = malloc(sizeof(t_command) * (*n_cmd));
+	command = malloc(sizeof(t_command *) * (*n_cmds));
 	if (!command)
 	{
 		printf("Malloc fail\n");
 		exit(1);
 	}
-	if (fill_cmds(&(*command), cmd, *n_cmd))
+	i = -1;
+	while (++i < *n_cmds)
 	{
-		printf("fill_cmds fail\n");
-		free(command);
-		exit(1);
+		command[i] = fill_cmd(i, cmds, envp);
 	}
-	if (*n_cmd == 1)
-	{
-		path =  getenv("PATH");
-	}
-	else
-		printf("MULTI-COMMAND NON ANCORA DISPONIBILE\n");
-
-//for(int p=0;i<10;i++)
-//printf("-- %s\n",command[0]->args[i]);
-
-	/*char *command = strtok(cmd, " ");
-	char *args[20];
-	int i = 0;
-	args[i++] = command;
-
-	char *arg = strtok(NULL, " ");
-	while (arg != NULL) {
-		args[i++] = arg;
-		arg = strtok(NULL, " ");
-	}
-	args[i] = NULL;
-
-	char *dir = strtok(path, ":");
-	while (dir != NULL) {
-		char program_path[1000];
-		sprintf(program_path, "%s/%s", dir, command);
-printf("----QUI?,%s/%s\n",dir,command);
-
-		if (access(program_path, X_OK) == 0) {
-printf("----entro\n");
-
-		int pid = fork();
-		int status;
-		if (pid == 0){//figlio
-			ret = execve(program_path, args, NULL);//  the execve function does not expand environment variables because it runs the program in a completely separate process
-			printf("qui non ci si deve arrivare\n");// qua sopra eseguo solo comandi
-			return 1;
-		}
-		if (pid > 0){//padre
-			waitpid(pid, &status, 0);
-			if (WIFEXITED(status))
-				printf("Exit status del figlio %d\n",WIFEXITED(status));
-		}
-		else 
-			printf("Fork error\n");
-
-
-printf("----esco\n");
-		}
-printf("----PERCEH QUI?,%s/%s\n",dir,command);
-		dir = strtok(NULL, ":");
-printf("----PERCEH QUI222222?,%s/%s\n",dir,command);
-	}*/
-
-
-	
+	printf("%s\n",command[0]->args[0]);
+	printf("%s\n",command[1]->args[0]);
+//	printf("%s , %s , %s\n",command[0]->args[2]);
+//	exec_cmd();
+	i = -1;
+	while (++i < *n_cmds)
+		free(command[i]);//devo liberare anche le cose dentro a command[i]
+	free(command);
 	return (0);
 }
 
 /*
 */
-int	fill_cmds(t_command **c_list, char *in_line, int size)
+t_command	*fill_cmd(int n_cmds, char *in_line, char *envp[])
 {
+	int			i;
+	int			j;
+	int			tmp;
+	int			arg;
+	int			quote_rep;
+	int			quotes_rep;
+	char		cmd[2048];
+	t_command	*ret_cmd;
+	
+	ret_cmd = malloc(sizeof(t_command) * 1);
+	if (!ret_cmd)
+	{
+		printf("Malloc fail\n");
+		exit(1);
+	}
+	tmp = -1;
+	quote_rep = 0;
+	quotes_rep = 0;
+	i = 0;
+	j = 0;
+	while (in_line[i] != '\0')
+	{
+		if (in_line[i] == '\'' && quotes_rep % 2 == 0)
+			quote_rep++;
+		if (in_line[i] == '"' && quote_rep % 2 == 0)
+			quotes_rep++;
+		if (tmp == n_cmds - 1)
+		{
+			cmd[j] = in_line[i];
+			j++;
+		}
+		if (in_line[i] == '|' && quote_rep % 2 == 0 && quotes_rep % 2 == 0)
+			tmp++;
+		if (tmp == n_cmds)
+			break ;
+		i++;
+	}
+	cmd[j] = '\0';
+	trimmer(cmd);//dentro command ho il comando numero i del loop che chiama la funzione
+
+printf("%sFINE\n",cmd);
+
+	i = 0;
+	j = 0;
+	tmp = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == ' ')
+		{
+			ret_cmd->args[tmp][j] = '\0';
+			tmp++;
+			j = 0;
+		}
+		else
+		{
+			ret_cmd->args[tmp][j] = cmd[i];
+			j++;
+		}
+		i++;
+	}
+	ft_memset(ret_cmd->args[tmp],'\0',2048);//controllare da qui
+	return (ret_cmd);
+}
+
+/*
+*/
+void	trimmer(char *str)
+{
+	int	n;
 	int	i;
 	int	j;
-	int	pos;
+	int	k;
+	int	in_word;
+	int	in_quote;
+	char	quote_char;
+	int l;
 
-	pos = 0;
+	n = ft_strlen(str);
 	i = 0;
-	while(in_line[pos] != '\0')//TODO fare le prove che salta qualche lettera...
+	while (i < n && ft_isspace(str[i])) {
+		i++;
+	}
+	j = n - 1;
+	while (j >= 0 && ft_isspace(str[j])) {
+		j--;
+	}
+	k = 0;
+	in_word = 0;
+	in_quote = 0;
+	quote_char = '\0';
+	l = i;
+	while (l <= j)
 	{
-		j = 0;
-		while(in_line[pos] != '\0' && in_line[pos] != '|')
+		if (str[l] == '\'' || str[l] == '\"')
 		{
-			while (ft_isspace(in_line[pos]))
-				pos++;
-printf("(%d)",i);
-printf("(%d)",j);
-			while(in_line[pos] != '\0' && in_line[pos] != '|' && !isspace(in_line[pos]))
-			{
-				while (ft_isspace(in_line[pos]))
-					pos++;
-				printf("%c",in_line[pos]);
-				pos++;
+			if (!in_quote) {
+				in_quote = 1;
+				quote_char = str[l];
+			} else if (str[l] == quote_char) {
+				in_quote = 0;
+				quote_char = '\0';
 			}
-			while (in_line[pos] == '|' || ft_isspace(in_line[pos]))
-			{
-			if (ft_isspace(in_line[pos]) && !ft_isspace(in_line[pos + 1]))
-			{
-	//			printf(" Quando tra %c e %c aumento j\n",in_line[pos],in_line[pos+1]);
-				j++;
-			}
-			if (in_line[pos] == '|')
-			{
-	//			printf(" Cresce i e j = 0\n");
-				i++;
-				j = 0;
-				pos++;
-				while (ft_isspace(in_line[pos]))
-					pos++;
-			}
-			pos++;
-			}
-		printf("\n");
+			str[k++] = str[l];
+		} else if (!ft_isspace(str[l]) || (in_quote && ft_isspace(str[l]))) {
+			str[k++] = str[l];
+			in_word = 1;
+		} else if (in_word) {
+			str[k++] = ' ';
+			in_word = 0;
+		}
+		l++;
+	}
+	if (str[k - 1] == '|')
+		str[k - 1] = '\0';
+	if (str[k - 2] == ' ')
+		str[k - 2] = '\0';	
+	str[k] = '\0';
+	trimmer2(str);
+}
+
+/*
+*/
+void	trimmer2(char *str)
+{
+	int n;
+	int i;
+	int j;
+
+	n = ft_strlen(str);
+	i = 0;
+	j = 0;
+	while (i < n)
+	{
+		if (str[i] == '>' || str[i] == '<') {
+		str[j++] = str[i++];
+		if (i < n && (str[i] == '>' || str[i] == '<')) {
+			str[j++] = str[i++];
+		}
+		while (i < n && ft_isspace(str[i])) {
+			i++;
+		}
+		} else {
+		str[j++] = str[i++];
 		}
 	}
-	printf("\n");
-	return (0);
+	str[j] = '\0';
 }
