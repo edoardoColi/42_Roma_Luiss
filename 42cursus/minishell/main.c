@@ -52,7 +52,7 @@ int	main(int argc, char *argv[], char *envp[])
 	do_ps1(ps1, 2048, 0);
 	while ( (in_line = readline(ps1)) != NULL)//per modificare questo faccio una stringa e metto quella
 	{
-printf("in_line = %s\n",in_line);
+printf("Ricevo = %s\n",in_line);
 		if (!is_empty(in_line))
 		{
 			add_history(in_line);

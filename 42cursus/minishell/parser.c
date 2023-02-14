@@ -21,8 +21,6 @@ int		parser(char *cmds, int *n_cmds, char *envp[])
 	char		*path;
 	t_command	**command;
 
-	printf("parso: %s\n",cmds);
-
 	command = malloc(sizeof(t_command *) * (*n_cmds));
 	if (!command)
 	{
@@ -33,11 +31,13 @@ int		parser(char *cmds, int *n_cmds, char *envp[])
 	while (++i < *n_cmds)
 	{
 		command[i] = fill_cmd(i, cmds, envp);
+int p=0;
+while(command[i]->args[p][0]){
+	printf("cmd[%d]arg[%d]- %s\n",i,p,command[i]->args[p]);
+	p++;
+}
 	}
-	printf("%s\n",command[0]->args[0]);
-	printf("%s\n",command[1]->args[0]);
-//	printf("%s , %s , %s\n",command[0]->args[2]);
-//	exec_cmd();
+//	execve(command[0]->args[0], (char **)command[0]->args, envp);
 	i = -1;
 	while (++i < *n_cmds)
 		free(command[i]);//devo liberare anche le cose dentro a command[i]
@@ -53,6 +53,7 @@ t_command	*fill_cmd(int n_cmds, char *in_line, char *envp[])
 	int			j;
 	int			tmp;
 	int			arg;
+	int			type;
 	int			quote_rep;
 	int			quotes_rep;
 	char		cmd[2048];
@@ -88,15 +89,24 @@ t_command	*fill_cmd(int n_cmds, char *in_line, char *envp[])
 	}
 	cmd[j] = '\0';
 	trimmer(cmd);//dentro command ho il comando numero i del loop che chiama la funzione
-
-printf("%sFINE\n",cmd);
-
+printf("%s\n",cmd);
 	i = 0;
 	j = 0;
+	type = -1;
+	quote_rep = 0;
+	quotes_rep = 0;
 	tmp = 0;
 	while (cmd[i])
+	//voglio che se sono simboli vadano a posto loro
+	//VOGLIO CHE SE SONO IN quotes tutte insieme
+
+	//TODO se "echo casa>file" lo splitta in due fai trimmer3
 	{
-		if (cmd[i] == ' ')
+		if (cmd[i] == '\'' && quotes_rep % 2 == 0)
+			quote_rep++;
+		if (cmd[i] == '"' && quote_rep % 2 == 0)
+			quotes_rep++;
+		if (cmd[i] == ' ' && quote_rep % 2 == 0 && quotes_rep % 2 == 0)
 		{
 			ret_cmd->args[tmp][j] = '\0';
 			tmp++;
@@ -109,7 +119,7 @@ printf("%sFINE\n",cmd);
 		}
 		i++;
 	}
-	ft_memset(ret_cmd->args[tmp],'\0',2048);//controllare da qui
+	ft_memset(ret_cmd->args[tmp + 1],'\0',2048);
 	return (ret_cmd);
 }
 
@@ -183,15 +193,17 @@ void	trimmer2(char *str)
 	while (i < n)
 	{
 		if (str[i] == '>' || str[i] == '<') {
-		str[j++] = str[i++];
-		if (i < n && (str[i] == '>' || str[i] == '<')) {
 			str[j++] = str[i++];
+			if (i < n && (str[i] == '>' || str[i] == '<')) {
+				str[j++] = str[i++];
+			}
+			while (i < n && ft_isspace(str[i])) {
+				i++;
+			}
 		}
-		while (i < n && ft_isspace(str[i])) {
-			i++;
-		}
-		} else {
-		str[j++] = str[i++];
+		else
+		{
+			str[j++] = str[i++];
 		}
 	}
 	str[j] = '\0';

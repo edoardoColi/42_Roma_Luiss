@@ -24,14 +24,12 @@ int		analyzer(char *cmd, int *n_cmd)
 	int	quotes_rep;
 	int tmp;
 	int	pos;
-
-	printf("analizzo: %s\n",cmd);
 	
 	quote_rep = 0;
 	quotes_rep = 0;
 	pos = 0;
 	*n_cmd = 1;
-	while (cmd[pos] != '\0')
+	while (cmd[pos] != '\0')//TODO i punti interrogativi solo se ho un dollaro senno no
 	{//lista dei caratteri speciali
 		if ((cmd[pos] == '!' ||	//Used for history expansion and negation of commands
 			cmd[pos] == '#' ||	//Used to start a comment
