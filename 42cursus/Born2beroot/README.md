@@ -52,7 +52,7 @@ dnf install -y epel-release
 dnf install --enablerepo="epel" -y ufw
 dnf install vsftpd
 ```
-DNF è un nuovo packet manager disponibile su _fedora_ dalla versione 18. Ha l'obiettivo di rimpiazzare `yum` nel lungo periodo. Essendo `dnf` un fork di _dnf_ vengono mantenuti tutti i vecchi comandi avendo però prestazioni migliori.  
+DNF è un nuovo packet manager disponibile su _fedora_ dalla versione 18. Ha l'obiettivo di rimpiazzare `yum` nel lungo periodo. Essendo `dnf` un fork di _yum_ vengono mantenuti tutti i vecchi comandi avendo però prestazioni migliori.  
 I vari comandi lanciati durante la guida vengono interpretati come eseguiti dall'utente root.
 
 ## Logical Volume Manager (LVM)
