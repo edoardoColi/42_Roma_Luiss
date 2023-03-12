@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   analyzer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecoli <ecoli@student.42.fr>                +#+  +:+       +#+        */
+/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/02/13 16:07:04 by ecoli            ###   ########.fr       */
+/*   Updated: 2023/03/11 14:37:57 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*
 */
-int		analyzer(char *cmd, int *n_cmd)
+int	analyzer(char *cmd, int *n_cmd)
 {
 	int	or_rep;
 	int	greater_rep;
@@ -29,7 +29,7 @@ int		analyzer(char *cmd, int *n_cmd)
 	quotes_rep = 0;
 	pos = 0;
 	*n_cmd = 1;
-	while (cmd[pos] != '\0')//TODO i punti interrogativi solo se ho un dollaro senno no
+	while (cmd[pos] != '\0')
 	{//lista dei caratteri speciali
 		if ((cmd[pos] == '!' ||	//Used for history expansion and negation of commands
 			cmd[pos] == '#' ||	//Used to start a comment
@@ -103,13 +103,23 @@ int		analyzer(char *cmd, int *n_cmd)
 					printf("minischell: syntax error near unexpected token `newline'\n");
 					return (2);
 				}
-				if(ft_isspace(cmd[pos + 1]) || cmd[pos + 1] == '>')
+				if(ft_isspace(cmd[pos + 1]) || cmd[pos + 1] == '>' || cmd[pos + 1] == '<' || cmd[pos + 1] == '|')
 				{	
 					if (ft_isspace(cmd[pos + 1]))
 						tmp = 1;
 					if (cmd[pos + 1] == '>' && tmp == 1)
 					{
 						printf("minischell: syntax error near unexpected token `>'\n");
+						return (2);
+					}
+					if (cmd[pos + 1] == '<')
+					{
+						printf("minischell: syntax error near unexpected token `<'\n");
+						return (2);
+					}
+					if (cmd[pos + 1] == '|')
+					{
+						printf("minischell: syntax error near unexpected token `|'\n");
 						return (2);
 					}
 					pos++;
@@ -142,13 +152,23 @@ int		analyzer(char *cmd, int *n_cmd)
 					printf("minischell: syntax error near unexpected token `newline'\n");
 					return (2);
 				}
-				if(ft_isspace(cmd[pos + 1]) || cmd[pos + 1] == '<')
+				if(ft_isspace(cmd[pos + 1]) || cmd[pos + 1] == '<' || cmd[pos + 1] == '>' || cmd[pos + 1] == '|')
 				{	
 					if (ft_isspace(cmd[pos + 1]))
 						tmp = 1;
 					if (cmd[pos + 1] == '<' && tmp == 1)
 					{
 						printf("minischell: syntax error near unexpected token `<'\n");
+						return (2);
+					}
+					if (cmd[pos + 1] == '>')
+					{
+						printf("minischell: syntax error near unexpected token `>'\n");
+						return (2);
+					}
+					if (cmd[pos + 1] == '|')
+					{
+						printf("minischell: syntax error near unexpected token `|'\n");
 						return (2);
 					}
 					pos++;

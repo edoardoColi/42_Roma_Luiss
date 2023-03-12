@@ -3,69 +3,221 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecoli <ecoli@student.42.fr>                +#+  +:+       +#+        */
+/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/02/13 20:29:37 by ecoli            ###   ########.fr       */
+/*   Updated: 2023/03/12 17:43:51 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "global.h"
 #include "functions.h"
 
-/*
-*/
-int		parser(char *cmds, int *n_cmds, char *envp[])
-{
-	int			i;
-	char		*path;
-	t_command	**command;
-
-	command = malloc(sizeof(t_command *) * (*n_cmds));
-	if (!command)
-	{
-		printf("Malloc fail\n");
-		exit(1);
-	}
-	i = -1;
-	while (++i < *n_cmds)
-	{
-		command[i] = fill_cmd(i, cmds, envp);
-int p=0;
-while(command[i]->args[p][0]){
-	printf("cmd[%d]arg[%d]- %s\n",i,p,command[i]->args[p]);
-	p++;
-}
-	}
-//	execve(command[0]->args[0], (char **)command[0]->args, envp);
-	i = -1;
-	while (++i < *n_cmds)
-		free(command[i]);//devo liberare anche le cose dentro a command[i]
-	free(command);
-	return (0);
-}
+static void	fill_spaces(char *str);
+static void	trim_spaces(char *str);
+static void	squeez_spaces(char *str);
+static void	expand_cmd(char **str, char *env[]);
 
 /*
 */
-t_command	*fill_cmd(int n_cmds, char *in_line, char *envp[])
+int		parser(char *cmds, int *n_cmds, char *env[])
 {
 	int			i;
 	int			j;
-	int			tmp;
-	int			arg;
-	int			type;
-	int			quote_rep;
-	int			quotes_rep;
-	char		cmd[2048];
-	t_command	*ret_cmd;
-	
-	ret_cmd = malloc(sizeof(t_command) * 1);
-	if (!ret_cmd)
+	int			ret;
+	int			pid_ret;
+	pid_t		pid;
+	t_command	*commands;
+
+	ret = 0;
+	commands = malloc(sizeof(t_command) * (*n_cmds));
+	if (!commands)
 	{
-		printf("Malloc fail\n");
+		perror("Fail malloc\n");
+		free(env);
 		exit(1);
 	}
-	tmp = -1;
+	//TODO controlla le malloc sotto, exit(1) mi basta per non fare le free?
+	i = -1;
+	while (++i < *n_cmds)	//allocate memory for the commands[i] arrays
+	{
+		commands[i].args = malloc(sizeof(char *) * MAX_ENTRY);
+		commands[i].rdr_in = malloc(sizeof(char *) * MAX_ENTRY);
+		commands[i].rdr_out = malloc(sizeof(char *) * MAX_ENTRY);
+		commands[i].heredoc = malloc(sizeof(char *) * MAX_ENTRY);
+		commands[i].append = malloc(sizeof(char *) * MAX_ENTRY);
+		j = -1;
+		while (++j < MAX_ENTRY)	//allocate memory for the commands[i].arrays strings
+		{
+			commands[i].args[j] = malloc(sizeof(char) * MAX_NAME);
+			commands[i].rdr_in[j] = malloc(sizeof(char) * MAX_NAME);
+			commands[i].rdr_out[j] = malloc(sizeof(char) * MAX_NAME);
+			commands[i].heredoc[j] = malloc(sizeof(char) * MAX_NAME);
+			commands[i].append[j] = malloc(sizeof(char) * MAX_NAME);
+			ft_memset(commands[i].args[j], '\0', MAX_NAME);
+			ft_memset(commands[i].rdr_in[j], '\0', MAX_NAME);
+			ft_memset(commands[i].rdr_out[j], '\0', MAX_NAME);
+			ft_memset(commands[i].heredoc[j], '\0', MAX_NAME);
+			ft_memset(commands[i].append[j], '\0', MAX_NAME);
+		}
+		commands[i].n_cmds = *n_cmds;
+		commands[i].ret = 0;
+		commands[i].err = 0;
+	}
+	i = -1;
+	while (++i < *n_cmds)
+	{
+		if (fill_cmd(&commands[i], i, cmds) != 0)//TODO dividere anche in rdr e heredoc non tutto in args
+		{
+			perror("Fail fill_cmd\n");
+			i = -1;
+			while (++i < *n_cmds)	//free loop for memory in the commands[i] arrays
+			{
+				j = -1;
+				while (++j < MAX_ENTRY)	//free loop for memory in the commands[i].arrays strings
+				{
+					free(commands[i].args[j]);
+					free(commands[i].rdr_in[j]);
+					free(commands[i].rdr_out[j]);
+					free(commands[i].heredoc[j]);
+					free(commands[i].append[j]);
+				}
+				free(commands[i].args);
+				free(commands[i].rdr_in);
+				free(commands[i].rdr_out);
+				free(commands[i].heredoc);
+				free(commands[i].append);
+			}
+			free(commands);
+			free(env);
+			exit(1);
+		}
+////////////////DEBUG CMDs
+		if(0){
+			int p=0;
+			int sbit=0;
+			while(p<10)
+			{
+				if(commands[i].args[p] && sbit==0)
+					printf("args '%-10s' %d-%d\n",commands[i].args[p],i,p);
+				else
+					sbit=1;
+				p++;
+			}
+			p=0;sbit=0;
+			while(p<10)
+			{
+				if(commands[i].rdr_in[p] && sbit==0)
+					printf("rdr_in '%-10s' %d-%d\n",commands[i].rdr_in[p],i,p);
+				else
+					sbit=1;
+				p++;
+			}
+			p=0;sbit=0;
+			while(p<10)
+			{
+				if(commands[i].rdr_out[p] && sbit==0)
+					printf("rdr_out '%-10s' %d-%d\n",commands[i].rdr_out[p],i,p);
+				else
+					sbit=1;
+				p++;
+			}
+			p=0;sbit=0;
+			while(p<10)
+			{
+				if(commands[i].heredoc[p] && sbit==0)
+					printf("heredoc '%-10s' %d-%d\n",commands[i].heredoc[p],i,p);
+				else
+					sbit=1;
+				p++;
+			}
+			p=0;sbit=0;
+			while(p<10)
+			{
+				if(commands[i].append[p] && sbit==0)
+					printf("append '%-10s' %d-%d\n",commands[i].append[p],i,p);
+				else
+					sbit=1;
+				p++;
+			}
+		}
+////////////////
+	}
+////////////////DEBUG ENV VAR
+	if(0){
+		printf("\nVARIABILI D'AMBIENTE\n\n");
+		int p = 0;
+		while (env[p] != NULL) {
+			printf("%s\n", env[p]);
+			p++;
+		}
+	}
+///////////////
+	i = -1;
+	while (++i < *n_cmds)
+	{//TODO non ho alcuna relazione tra esecuzione comando prima e dopo
+		//TODO espando $
+		//TODO levo gli apici dagli args
+		ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
+		if ( ret == 2)	//il comando non e' builtin
+		{
+			pid = fork();
+			if (pid == -1){
+				perror("Fail fork\n");
+				exit(1);
+			}
+			if (pid == 0) //processo figlio
+			{
+				expand_cmd(&(commands[i].args[0]), env);
+				execve(commands[i].args[0], commands[i].args, env);
+				printf("bash: %s: command not found\n", commands[i].args[0]);
+				exit(1);
+			}
+			else //processo padre
+			{
+				wait(&pid_ret);
+				if (WIFEXITED(pid_ret) && WEXITSTATUS(pid_ret) == 1)//la execve fallisce e ritorna con exit(1)
+					ret = 1;
+				else
+					ret = 0;
+			}
+		}
+	}
+	i = -1;
+	while (++i < *n_cmds)	//free loop for memory in the commands[i] arrays
+	{
+		j = -1;
+		while (++j < MAX_ENTRY)	//free loop for memory in the commands[i].arrays strings
+		{
+			free(commands[i].args[j]);
+			free(commands[i].rdr_in[j]);
+			free(commands[i].rdr_out[j]);
+			free(commands[i].heredoc[j]);
+			free(commands[i].append[j]);
+		}
+		free(commands[i].args);
+		free(commands[i].rdr_in);
+		free(commands[i].rdr_out);
+		free(commands[i].heredoc);
+		free(commands[i].append);
+	}
+	free(commands);
+	return (ret);
+}
+
+/*
+*/
+int	fill_cmd(t_command *to_fill, int n_cmd, char *in_line)
+{
+	int			i;
+	int			j;
+	int			tmp[5];
+	int			quote_rep;
+	int			quotes_rep;
+	char		cmd[MAX_CMD];
+	
+
+	tmp[0] = -1;
 	quote_rep = 0;
 	quotes_rep = 0;
 	i = 0;
@@ -76,31 +228,32 @@ t_command	*fill_cmd(int n_cmds, char *in_line, char *envp[])
 			quote_rep++;
 		if (in_line[i] == '"' && quote_rep % 2 == 0)
 			quotes_rep++;
-		if (tmp == n_cmds - 1)
+		if (tmp[0] == n_cmd - 1)
 		{
 			cmd[j] = in_line[i];
 			j++;
 		}
 		if (in_line[i] == '|' && quote_rep % 2 == 0 && quotes_rep % 2 == 0)
-			tmp++;
-		if (tmp == n_cmds)
+			tmp[0]++;
+		if (tmp[0] == n_cmd)
 			break ;
 		i++;
 	}
 	cmd[j] = '\0';
-	trimmer(cmd);//dentro command ho il comando numero i del loop che chiama la funzione
-printf("%s\n",cmd);
+	if (setup_spaces(cmd) != 0)
+		return (1);
 	i = 0;
 	j = 0;
-	type = -1;
 	quote_rep = 0;
 	quotes_rep = 0;
-	tmp = 0;
+	tmp[0] = 0;
+	tmp[1] = 0;
+	tmp[2] = 0;
+	tmp[3] = 0;
+	tmp[4] = 0;
 	while (cmd[i])
-	//voglio che se sono simboli vadano a posto loro
-	//VOGLIO CHE SE SONO IN quotes tutte insieme
-
-	//TODO se "echo casa>file" lo splitta in due fai trimmer3
+	//voglio che se sono simboli $ siano modificate
+	//VOGLIO CHE SE SONO IN quotes restino uguali senza le estremita'
 	{
 		if (cmd[i] == '\'' && quotes_rep % 2 == 0)
 			quote_rep++;
@@ -108,40 +261,104 @@ printf("%s\n",cmd);
 			quotes_rep++;
 		if (cmd[i] == ' ' && quote_rep % 2 == 0 && quotes_rep % 2 == 0)
 		{
-			ret_cmd->args[tmp][j] = '\0';
-			tmp++;
+			ft_strlcat(to_fill->args[tmp[0]], "\0", MAX_NAME);//non lo mette se sono alla fine perche non ho lo spazio
+			(tmp[0])++;
 			j = 0;
 		}
 		else
 		{
-			ret_cmd->args[tmp][j] = cmd[i];
+			ft_strlcat(to_fill->args[tmp[0]], (char[]){cmd[i], '\0'}, MAX_NAME);//vado a inserire la singola lettera ma la vedo come stringa e non come char
 			j++;
 		}
 		i++;
 	}
-	ft_memset(ret_cmd->args[tmp + 1],'\0',2048);
-	return (ret_cmd);
+	ft_strlcat(to_fill->args[tmp[0]], "\0", MAX_NAME);
+	free(to_fill->args[tmp[0]+1]);
+	to_fill->args[tmp[0]+1] = NULL;
+	free(to_fill->rdr_in[tmp[1]+1]);
+	to_fill->rdr_in[tmp[1]+1] = NULL;
+	free(to_fill->rdr_out[tmp[2]+1]);
+	to_fill->rdr_out[tmp[2]+1] = NULL;
+	free(to_fill->heredoc[tmp[3]+1]);
+	to_fill->heredoc[tmp[3]+1] = NULL;
+	free(to_fill->append[tmp[4]+1]);
+	to_fill->append[tmp[4]+1] = NULL;
+	return (0);
 }
 
 /*
 */
-void	trimmer(char *str)
+int	setup_spaces(char *str)
 {
-	int	n;
-	int	i;
-	int	j;
-	int	k;
-	int	in_word;
-	int	in_quote;
-	char	quote_char;
-	int l;
+	fill_spaces(str);
+	trim_spaces(str);
+	squeez_spaces(str);
+	return (0);
+}
 
-	n = ft_strlen(str);
+/*
+*/
+static void	fill_spaces(char *str)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	new_str[MAX_CMD];
+
+	len = ft_strlen(str);
 	i = 0;
-	while (i < n && ft_isspace(str[i])) {
+	j = 0;
+	while (i < len)
+	{
+		if (str[i] == '<' || str[i] == '>' || str[i] == '|') {
+			new_str[j++] = ' ';
+			new_str[j] = str[i];
+			if (str[i+1] == str[i]) { // if the next character is also a '<', '>', or '|'
+				new_str[++j] = str[i+1];
+				i++; // skip the next character
+			}
+			new_str[++j] = ' ';
+		} else if (str[i] == '"' || str[i] == '\'') {
+			char quote = str[i];
+			new_str[j] = str[i];
+			while (i < len && str[++i] != quote) {
+				new_str[++j] = str[i];
+			}
+			new_str[++j] = quote;
+		} else {
+			new_str[j] = str[i];
+		}
+		i++;
+		j++;
+	}
+	new_str[j] = '\0';
+	i = 0;
+	while (new_str[i] != '\0')//loop per ricopiare la stringa
+	{
+		str[i] = new_str[i];
 		i++;
 	}
-	j = n - 1;
+	str[i] = '\0';
+}
+
+/*
+*/
+static void	trim_spaces(char *str)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		len;
+	int		in_word;
+	int		in_quote;
+	char	quote_char;
+
+	len = ft_strlen(str);
+	i = 0;
+	while (i < len && ft_isspace(str[i])) {
+		i++;
+	}
+	j = len - 1;
 	while (j >= 0 && ft_isspace(str[j])) {
 		j--;
 	}
@@ -149,43 +366,41 @@ void	trimmer(char *str)
 	in_word = 0;
 	in_quote = 0;
 	quote_char = '\0';
-	l = i;
-	while (l <= j)
+	while (i <= j)
 	{
-		if (str[l] == '\'' || str[l] == '\"')
+		if (str[i] == '\'' || str[i] == '\"')
 		{
 			if (!in_quote) {
 				in_quote = 1;
-				quote_char = str[l];
-			} else if (str[l] == quote_char) {
+				quote_char = str[i];
+			} else if (str[i] == quote_char) {
 				in_quote = 0;
 				quote_char = '\0';
 			}
-			str[k++] = str[l];
-		} else if (!ft_isspace(str[l]) || (in_quote && ft_isspace(str[l]))) {
-			str[k++] = str[l];
+			str[k++] = str[i];
+		} else if (!ft_isspace(str[i]) || (in_quote && ft_isspace(str[i]))) {
+			str[k++] = str[i];
 			in_word = 1;
 		} else if (in_word) {
 			str[k++] = ' ';
 			in_word = 0;
 		}
-		l++;
+		i++;
 	}
+	if (str[k - 2] == ' ' && str[k - 1] == '|')
+		str[k - 2] = '\0';	
 	if (str[k - 1] == '|')
 		str[k - 1] = '\0';
-	if (str[k - 2] == ' ')
-		str[k - 2] = '\0';	
 	str[k] = '\0';
-	trimmer2(str);
 }
 
 /*
 */
-void	trimmer2(char *str)
+static void	squeez_spaces(char *str)
 {
-	int n;
 	int i;
 	int j;
+	int n;
 
 	n = ft_strlen(str);
 	i = 0;
@@ -207,4 +422,41 @@ void	trimmer2(char *str)
 		}
 	}
 	str[j] = '\0';
+}
+
+/*
+*/
+static void	expand_cmd(char **str, char *env[])//TODO non posso usare queste funzioni, pero funziona
+{
+    char* cmd = *str;
+    char* path_env = adhoc_getenv("PATH", env);
+    
+    
+    if (!path_env) {// If the PATH environment variable isn't set, return
+        return;
+    }
+    
+    // Copy the PATH environment variable to a new buffer so that we can modify it
+    char path[MAX_NAME];
+    strcpy(path, path_env);
+    
+    // Tokenize the PATH variable by ':' characters
+    char* dir = strtok(path, ":");
+    while (dir) {
+        // Create a buffer for the full path to the command in this directory
+        char full_path[MAX_NAME];
+        strcpy(full_path, dir);
+        strcat(full_path, "/");
+        strcat(full_path, cmd);
+        
+        // Check if the command exists in this directory
+        if (access(full_path, X_OK) == 0) {
+            // If it does, replace the command string with the full path
+            *str = strdup(full_path);
+            return;
+        }
+        
+        // If not, move on to the next directory in the PATH
+        dir = strtok(NULL, ":");
+    }
 }

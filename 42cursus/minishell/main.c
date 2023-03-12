@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecoli <ecoli@student.42.fr>                +#+  +:+       +#+        */
+/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/02/13 20:10:10 by ecoli            ###   ########.fr       */
+/*   Updated: 2023/03/12 22:16:58 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "functions.h"
 
 static void	handler(int sig, siginfo_t *siginfo, void *context);
-static void	do_ps1(char *ps1, size_t len, int mod);
+static void	do_ps1(char *ps1, size_t len, int mod, char *env[]);
 static int	insert_ps1(char *ps1, int p, const char *color);
 static int	is_empty(char *str);
 
@@ -30,41 +30,69 @@ struct sigaction {
 */
 int	main(int argc, char *argv[], char *envp[])
 {
-	struct sigaction	act;
-	char				*in_line;
-	char				ps1[2048];
+	int					i;
 	int					ret_val;
 	int					n_cmd;
+	char				ps1[2048];
+	char				*in_line;
+	char				**my_env;
+	struct sigaction	act;
 
 	ft_memset(&act, '\0', sizeof(act));
 	act.sa_sigaction = &handler;				//Meaningful only when estabilishing a signal handler. More in 'man sigaction'
 	act.sa_flags = SA_SIGINFO;					//When the SA_SIGINFO flag is specified in act.sa_flags, the signal handler address is passed via the act.sa_sigaction field. This handler takes three arguments. More in 'man sigaction'
 	if (sigaction(SIGINT, &act, NULL) == -1)	//Examine and change a signal action
 	{
-		printf("Sigaction(SIGINT) fail\n");
+		perror("Fail sigaction(SIGINT)\n");
 		return (1);
 	}
 	if (sigaction(SIGQUIT, &act, NULL) == -1)	//Examine and change a signal action
 	{
-		printf("Sigaction(SIGQUIT) fail\n");
+		perror("Fail sigaction(SIGQUIT)\n");
 		return (1);
 	}
-	do_ps1(ps1, 2048, 0);
+	my_env = malloc(sizeof(char*) * MAX_ENTRY);
+	if (!my_env)
+	{
+		perror("Fail malloc\n");
+		return (1);
+	}
+	i = -1;
+	while (envp[++i])
+		my_env[i] = ft_strdup(envp[i]);
+	my_env[i] = NULL;
+	do_ps1(ps1, 2048, 0, my_env);
+
+	//PROBLEMI
+	// echo prova>">si"
+	// cat '>si'
+	// cat ">si"
+	// cat >si
+	// 
+
+	//TEST memoria
+	// in_line = "export ok=mia si=no forse=no bene=ok osk=as|env|unset si forse|env";
+	// n_cmd = 4;
+	// parser(in_line, &n_cmd, my_env);
+
 	while ( (in_line = readline(ps1)) != NULL)//per modificare questo faccio una stringa e metto quella
 	{
-printf("Ricevo = %s\n",in_line);
 		if (!is_empty(in_line))
 		{
 			add_history(in_line);
 			ret_val = analyzer(in_line, &n_cmd);
 			if (ret_val == 0)
-				ret_val = parser(in_line, &n_cmd, envp);
+				ret_val = parser(in_line, &n_cmd, my_env);
 		}
 		else
 			ret_val = 0;
 		free(in_line);
-		do_ps1(ps1, 2048, ret_val);
+		do_ps1(ps1, 2048, ret_val, my_env);
 	}
+	i = -1;
+	while (my_env[++i])
+		free(my_env[i]);
+	free(my_env);
 	printf("\n");//readline fallisce quando si preme ctrl-D (EOF) ergo usciamo dal while
 	return (0);
 }
@@ -87,7 +115,7 @@ typedef struct {
 	int si_band;
 } siginfo_t;
 */
-static void	handler(int sig, siginfo_t *siginfo, void *context)
+static void	handler(int sig, siginfo_t *siginfo, void *context)//TODO attualmente printano solo di essere stati ricevuti
 {
 	(void)context;								//Cast for unused warning
 	if (sig == SIGINT)//codice 2
@@ -118,7 +146,7 @@ static int	is_empty(char *str)
 
 /*
 */
-static void	do_ps1(char *ps1, size_t len, int mod)
+static void	do_ps1(char *ps1, size_t len, int mod, char *env[])
 {
 	char	*pwd;
 	char	*user;
@@ -127,8 +155,8 @@ static void	do_ps1(char *ps1, size_t len, int mod)
 	int		j;
 
 	ft_memset(ps1, '\0', len);
-	user = getenv("USER");
-	pwd = getenv("PWD");
+	user = adhoc_getenv("USER", env);//FIX se si fa unset di queste crasha
+	pwd = adhoc_getenv("PWD", env);
 	i = -1;
 	if (mod == 0)
 		i += insert_ps1(ps1, i + 1, "\U0001F607");//emoji angel face
@@ -147,7 +175,7 @@ static void	do_ps1(char *ps1, size_t len, int mod)
 	while (++i < len && pwd[++j] != '\0')
 		ps1[i] = pwd[j];
 	i += insert_ps1(ps1, i, "\033[1;00m");//grassetto e colore bianco
-	ps1[i] = '$';
+	ps1[i] = '$';//user account type
 	ps1[i+1] = ' ';
 }
 
