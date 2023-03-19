@@ -156,7 +156,6 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 	i = -1;
 	int fd[*n_cmds - 1][2];
 	// int fd1[2];
-	// printf("n =cmd : %d", *n_cmds);
 
 // 		commands->red_type = malloc(sizeof(int));
 // 	commands->red_type[0] = 0;
