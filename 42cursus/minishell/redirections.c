@@ -95,7 +95,7 @@ int pipein(int fd[2])
     close(fd[1]);
     if ( dup2(fd[0], 0 )== - 1)
         {
-            write(2,"DUP OUT ERROR\n", 14);  
+            write(2,"DUP IN ERROR\n", 14);  
             exit(1);
         }
       
