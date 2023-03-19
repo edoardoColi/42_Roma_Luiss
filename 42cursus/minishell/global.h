@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:39 by ecoli             #+#    #+#             */
-/*   Updated: 2023/03/12 21:15:44 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/13 19:06:19 by sfarina          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 # include <sys/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-
+# include <string.h>
+# include <fcntl.h>
 # define MAX_ENTRY	128
 # define MAX_NAME	4096
 # define MAX_CMD	3072
@@ -49,6 +50,7 @@ typedef struct s_command
 	int		n_cmds;
 	int		ret;		//return del comando
 	int		err;		//errno
+	int		*red_type;
 }	t_command;
 
 #endif

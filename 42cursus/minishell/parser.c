@@ -154,20 +154,38 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 	}
 ///////////////
 	i = -1;
+	int fd[*n_cmds - 1][2];
+	// int fd1[2];
+
+// 		commands->red_type = malloc(sizeof(int));
+// 	commands->red_type[0] = 0;
+// commands->red_type[1] = 0;
+// commands->red_type[2] = 0;
+	//   printf("%s", commands[0].args[0]);
 	while (++i < *n_cmds)
 	{//TODO non ho alcuna relazione tra esecuzione comando prima e dopo
 		//TODO espando $
 		//TODO levo gli apici dagli args
 		ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
 		if ( ret == 2)	//il comando non e' builtin
-		{
+		{	
+			if(fd[i])	 
+			pipe(fd[i]);
 			pid = fork();
 			if (pid == -1){
 				perror("Fail fork\n");
 				exit(1);
 			}
 			if (pid == 0) //processo figlio
-			{
+			{ 
+				// printf("executing here ");
+			
+			  	 if(i > 0)
+			  	pipein(fd[i -1]); // prendo l'input dalla read della pipe precedente
+				   if (i + 1 < *n_cmds)			// se come controllo uso commands[i].args non funziona sempre come condizione
+				     pipeout(fd[i]);                    //TODO devo chiudere la read della pipe precedente
+				   // printf("äoooo\n\n\\n");
+				// redirect_i(commands);
 				expand_cmd(&(commands[i].args[0]), env);
 				execve(commands[i].args[0], commands[i].args, env);
 				printf("bash: %s: command not found\n", commands[i].args[0]);
@@ -175,7 +193,10 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 			}
 			else //processo padre
 			{
-				wait(&pid_ret);
+				waitpid(pid, NULL, 0);
+				  close(fd[i][1]);
+				 if (!commands[i + 1].args) 
+				    close(fd[i][0]);
 				if (WIFEXITED(pid_ret) && WEXITSTATUS(pid_ret) == 1)//la execve fallisce e ritorna con exit(1)
 					ret = 1;
 				else
