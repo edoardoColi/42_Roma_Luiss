@@ -28,6 +28,10 @@ char		*ft_strdup(char *str);
 char		*adhoc_getenv(const char *name, char *env[]);
 size_t		ft_strlen(const char *s);
 size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
+int redirect_o(t_command *cmd);
+int redirect_i(t_command *cmd);
+int pipeout(int fd[2]);
+int pipein(int fd[2]);
 //builtins.c
 int	do_builtin(const char *path, char *const *argv, char *const *env, t_command **commands);
 #endif
