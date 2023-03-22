@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/12 17:43:51 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/23 00:01:12 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static void	fill_spaces(char *str);
 static void	trim_spaces(char *str);
 static void	squeez_spaces(char *str);
 static void	expand_cmd(char **str, char *env[]);
+static void	replace_dollar(char ***str, char *env[]);
 
 /*
 */
@@ -42,27 +43,20 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 	while (++i < *n_cmds)	//allocate memory for the commands[i] arrays
 	{
 		commands[i].args = malloc(sizeof(char *) * MAX_ENTRY);
-		commands[i].rdr_in = malloc(sizeof(char *) * MAX_ENTRY);
-		commands[i].rdr_out = malloc(sizeof(char *) * MAX_ENTRY);
-		commands[i].heredoc = malloc(sizeof(char *) * MAX_ENTRY);
-		commands[i].append = malloc(sizeof(char *) * MAX_ENTRY);
+		commands[i].rin_and_heredoc = malloc(sizeof(char *) * MAX_ENTRY);
+		commands[i].rout_and_append = malloc(sizeof(char *) * MAX_ENTRY);
 		j = -1;
 		while (++j < MAX_ENTRY)	//allocate memory for the commands[i].arrays strings
 		{
 			commands[i].args[j] = malloc(sizeof(char) * MAX_NAME);
-			commands[i].rdr_in[j] = malloc(sizeof(char) * MAX_NAME);
-			commands[i].rdr_out[j] = malloc(sizeof(char) * MAX_NAME);
-			commands[i].heredoc[j] = malloc(sizeof(char) * MAX_NAME);
-			commands[i].append[j] = malloc(sizeof(char) * MAX_NAME);
+			commands[i].rin_and_heredoc[j] = malloc(sizeof(char) * MAX_NAME);
+			commands[i].rout_and_append[j] = malloc(sizeof(char) * MAX_NAME);
 			ft_memset(commands[i].args[j], '\0', MAX_NAME);
-			ft_memset(commands[i].rdr_in[j], '\0', MAX_NAME);
-			ft_memset(commands[i].rdr_out[j], '\0', MAX_NAME);
-			ft_memset(commands[i].heredoc[j], '\0', MAX_NAME);
-			ft_memset(commands[i].append[j], '\0', MAX_NAME);
+			ft_memset(commands[i].rin_and_heredoc[j], '\0', MAX_NAME);
+			ft_memset(commands[i].rout_and_append[j], '\0', MAX_NAME);
 		}
-		commands[i].n_cmds = *n_cmds;
-		commands[i].ret = 0;
-		commands[i].err = 0;
+		//TODO inizializza *red_type
+		//TODO inizializza fd
 	}
 	i = -1;
 	while (++i < *n_cmds)
@@ -77,23 +71,19 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 				while (++j < MAX_ENTRY)	//free loop for memory in the commands[i].arrays strings
 				{
 					free(commands[i].args[j]);
-					free(commands[i].rdr_in[j]);
-					free(commands[i].rdr_out[j]);
-					free(commands[i].heredoc[j]);
-					free(commands[i].append[j]);
+					free(commands[i].rin_and_heredoc[j]);
+					free(commands[i].rout_and_append[j]);
 				}
 				free(commands[i].args);
-				free(commands[i].rdr_in);
-				free(commands[i].rdr_out);
-				free(commands[i].heredoc);
-				free(commands[i].append);
+				free(commands[i].rin_and_heredoc);
+				free(commands[i].rout_and_append);
 			}
 			free(commands);
 			free(env);
 			exit(1);
 		}
 ////////////////DEBUG CMDs
-		if(0){
+		if(1){
 			int p=0;
 			int sbit=0;
 			while(p<10)
@@ -107,8 +97,8 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 			p=0;sbit=0;
 			while(p<10)
 			{
-				if(commands[i].rdr_in[p] && sbit==0)
-					printf("rdr_in '%-10s' %d-%d\n",commands[i].rdr_in[p],i,p);
+				if(commands[i].rin_and_heredoc[p] && sbit==0)
+					printf("rin_and_heredoc '%-10s' %d-%d\n",commands[i].rin_and_heredoc[p],i,p);
 				else
 					sbit=1;
 				p++;
@@ -116,26 +106,8 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 			p=0;sbit=0;
 			while(p<10)
 			{
-				if(commands[i].rdr_out[p] && sbit==0)
-					printf("rdr_out '%-10s' %d-%d\n",commands[i].rdr_out[p],i,p);
-				else
-					sbit=1;
-				p++;
-			}
-			p=0;sbit=0;
-			while(p<10)
-			{
-				if(commands[i].heredoc[p] && sbit==0)
-					printf("heredoc '%-10s' %d-%d\n",commands[i].heredoc[p],i,p);
-				else
-					sbit=1;
-				p++;
-			}
-			p=0;sbit=0;
-			while(p<10)
-			{
-				if(commands[i].append[p] && sbit==0)
-					printf("append '%-10s' %d-%d\n",commands[i].append[p],i,p);
+				if(commands[i].rout_and_append[p] && sbit==0)
+					printf("rout_and_append '%-10s' %d-%d\n",commands[i].rout_and_append[p],i,p);
 				else
 					sbit=1;
 				p++;
@@ -154,56 +126,79 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 	}
 ///////////////
 	i = -1;
-	int fd[*n_cmds - 1][2];
-	// int fd1[2];
-
-// 		commands->red_type = malloc(sizeof(int));
-// 	commands->red_type[0] = 0;
-// commands->red_type[1] = 0;
-// commands->red_type[2] = 0;
-	//   printf("%s", commands[0].args[0]);
 	while (++i < *n_cmds)
 	{//TODO non ho alcuna relazione tra esecuzione comando prima e dopo
-		//TODO espando $
-		//TODO levo gli apici dagli args
-		ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
-		if ( ret == 2)	//il comando non e' builtin
-		{	
-			if(fd[i])	 
-			pipe(fd[i]);
+		//TODO espando $ a meno che non sono in '...'
+		//TODO levo gli apici dagli args, il primo e l'ultimo + tutti quelli accoppiati (tipo: cd "casa mi"'a molt"o bella')
+		if (*n_cmds == 1)
+			ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
+		else
+			ret = 2;
+		if (ret == 2)	//il comando non e' builtin oppure e' in pipeline
+		{
 			pid = fork();
 			if (pid == -1){
 				perror("Fail fork\n");
 				exit(1);
 			}
 			if (pid == 0) //processo figlio
-			{ 
-				// printf("executing here ");
-			
-			  	 if(i > 0)
-			  	pipein(fd[i -1]); // prendo l'input dalla read della pipe precedente
-				   if (i + 1 < *n_cmds)			// se come controllo uso commands[i].args non funziona sempre come condizione
-				     pipeout(fd[i]);                    //TODO devo chiudere la read della pipe precedente
-				   // printf("äoooo\n\n\\n");
-				// redirect_i(commands);
-				expand_cmd(&(commands[i].args[0]), env);
-				execve(commands[i].args[0], commands[i].args, env);
-				printf("bash: %s: command not found\n", commands[i].args[0]);
-				exit(1);
+			{
+				ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
+				if (ret == 2)	//il comando non e' builtin
+				{
+					expand_cmd(&(commands[i].args[0]), env);
+					execve(commands[i].args[0], commands[i].args, env);
+					printf("bash: %s: command not found\n", commands[i].args[0]);
+					ret = 127;
+				}
+				exit(ret);
 			}
 			else //processo padre
 			{
-				waitpid(pid, NULL, 0);
-				  close(fd[i][1]);
-				 if (!commands[i + 1].args) 
-				    close(fd[i][0]);
-				if (WIFEXITED(pid_ret) && WEXITSTATUS(pid_ret) == 1)//la execve fallisce e ritorna con exit(1)
-					ret = 1;
+				waitpid(pid, &pid_ret, 0);
+				if (WIFEXITED(pid_ret) && WEXITSTATUS(pid_ret) != 0)//figlio ritorna con exit()
+					ret = WEXITSTATUS(pid_ret);
 				else
 					ret = 0;
 			}
 		}
 	}
+////////////////DEBUG CMDs
+		if(0){
+			int kk=-1;
+			while(++kk<*n_cmds)
+			{
+				int p=0;
+				int sbit=0;
+				while(p<10)
+				{
+					if(commands[kk].args[p] && sbit==0)
+						printf("args '%-10s' %d-%d\n",commands[kk].args[p],i,p);
+					else
+						sbit=1;
+					p++;
+				}
+				p=0;sbit=0;
+				while(p<10)
+				{
+					if(commands[kk].rin_and_heredoc[p] && sbit==0)
+						printf("rin_and_heredoc '%-10s' %d-%d\n",commands[kk].rin_and_heredoc[p],i,p);
+					else
+						sbit=1;
+					p++;
+				}
+				p=0;sbit=0;
+				while(p<10)
+				{
+					if(commands[kk].rout_and_append[p] && sbit==0)
+						printf("rout_and_append '%-10s' %d-%d\n",commands[kk].rout_and_append[p],i,p);
+					else
+						sbit=1;
+					p++;
+				}
+			}
+		}
+////////////////
 	i = -1;
 	while (++i < *n_cmds)	//free loop for memory in the commands[i] arrays
 	{
@@ -211,16 +206,12 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 		while (++j < MAX_ENTRY)	//free loop for memory in the commands[i].arrays strings
 		{
 			free(commands[i].args[j]);
-			free(commands[i].rdr_in[j]);
-			free(commands[i].rdr_out[j]);
-			free(commands[i].heredoc[j]);
-			free(commands[i].append[j]);
+			free(commands[i].rin_and_heredoc[j]);
+			free(commands[i].rout_and_append[j]);
 		}
 		free(commands[i].args);
-		free(commands[i].rdr_in);
-		free(commands[i].rdr_out);
-		free(commands[i].heredoc);
-		free(commands[i].append);
+		free(commands[i].rin_and_heredoc);
+		free(commands[i].rout_and_append);
 	}
 	free(commands);
 	return (ret);
@@ -235,6 +226,7 @@ int	fill_cmd(t_command *to_fill, int n_cmd, char *in_line)
 	int			tmp[5];
 	int			quote_rep;
 	int			quotes_rep;
+	char		arg_tmp[MAX_NAME];
 	char		cmd[MAX_CMD];
 	
 
@@ -270,11 +262,9 @@ int	fill_cmd(t_command *to_fill, int n_cmd, char *in_line)
 	tmp[0] = 0;
 	tmp[1] = 0;
 	tmp[2] = 0;
-	tmp[3] = 0;
-	tmp[4] = 0;
 	while (cmd[i])
-	//voglio che se sono simboli $ siano modificate
-	//VOGLIO CHE SE SONO IN quotes restino uguali senza le estremita'
+	//voglio che se sono simboli $ siano modificate						(faccio dopo, prima di eseguirli)//TODO meglio qui
+	//voglio che se sono in quotes restino uguali senza le estremita'	(faccio dopo, prima di eseguirli)//TODO meglio qui
 	{
 		if (cmd[i] == '\'' && quotes_rep % 2 == 0)
 			quote_rep++;
@@ -294,16 +284,36 @@ int	fill_cmd(t_command *to_fill, int n_cmd, char *in_line)
 		i++;
 	}
 	ft_strlcat(to_fill->args[tmp[0]], "\0", MAX_NAME);
-	free(to_fill->args[tmp[0]+1]);
-	to_fill->args[tmp[0]+1] = NULL;
-	free(to_fill->rdr_in[tmp[1]+1]);
-	to_fill->rdr_in[tmp[1]+1] = NULL;
-	free(to_fill->rdr_out[tmp[2]+1]);
-	to_fill->rdr_out[tmp[2]+1] = NULL;
-	free(to_fill->heredoc[tmp[3]+1]);
-	to_fill->heredoc[tmp[3]+1] = NULL;
-	free(to_fill->append[tmp[4]+1]);
-	to_fill->append[tmp[4]+1] = NULL;
+	i = -1;
+	j = tmp[0];
+	tmp[0] = 0;
+	while (++i <= j)	// loop per riempire le redirections
+	{
+		if (to_fill->args[i][0] == '<')
+		{
+			ft_strlcat(to_fill->rin_and_heredoc[tmp[1]], to_fill->args[i], MAX_NAME);
+			(tmp[1])++;
+		}
+		else if (to_fill->args[i][0] == '>')
+		{
+			ft_strlcat(to_fill->rout_and_append[tmp[2]], to_fill->args[i], MAX_NAME);
+			(tmp[2])++;
+		}
+		else
+		{
+			ft_memset(arg_tmp, '\0', MAX_NAME);//pulisco prima di copiare sopra
+			ft_strlcat(arg_tmp, to_fill->args[i], MAX_NAME);
+			ft_memset(to_fill->args[tmp[0]], '\0', MAX_NAME);//pulisco prima di copiare sopra
+			ft_strlcat(to_fill->args[tmp[0]], arg_tmp, MAX_NAME);
+			(tmp[0])++;
+		}
+	}
+	free(to_fill->args[tmp[0]]);	//libero perche senno mettendo a null perdo il riferimento
+	to_fill->args[tmp[0]] = NULL;
+	free(to_fill->rin_and_heredoc[tmp[1]]);	//libero perche senno mettendo a null perdo il riferimento
+	to_fill->rin_and_heredoc[tmp[1]] = NULL;
+	free(to_fill->rout_and_append[tmp[2]]);	//libero perche senno mettendo a null perdo il riferimento
+	to_fill->rout_and_append[tmp[2]] = NULL;
 	return (0);
 }
 
@@ -449,35 +459,42 @@ static void	squeez_spaces(char *str)
 */
 static void	expand_cmd(char **str, char *env[])//TODO non posso usare queste funzioni, pero funziona
 {
-    char* cmd = *str;
-    char* path_env = adhoc_getenv("PATH", env);
-    
-    
-    if (!path_env) {// If the PATH environment variable isn't set, return
-        return;
-    }
-    
-    // Copy the PATH environment variable to a new buffer so that we can modify it
-    char path[MAX_NAME];
-    strcpy(path, path_env);
-    
-    // Tokenize the PATH variable by ':' characters
-    char* dir = strtok(path, ":");
-    while (dir) {
-        // Create a buffer for the full path to the command in this directory
-        char full_path[MAX_NAME];
-        strcpy(full_path, dir);
-        strcat(full_path, "/");
-        strcat(full_path, cmd);
-        
-        // Check if the command exists in this directory
-        if (access(full_path, X_OK) == 0) {
-            // If it does, replace the command string with the full path
-            *str = strdup(full_path);
-            return;
-        }
-        
-        // If not, move on to the next directory in the PATH
-        dir = strtok(NULL, ":");
-    }
+	char* cmd = *str;
+	char* path_env = adhoc_getenv("PATH", env);
+	
+	
+	if (!path_env) {// If the PATH environment variable isn't set, return
+		return;
+	}
+	
+	// Copy the PATH environment variable to a new buffer so that we can modify it
+	char path[MAX_NAME];
+	strcpy(path, path_env);
+	
+	// Tokenize the PATH variable by ':' characters
+	char* dir = strtok(path, ":");
+	while (dir) {
+		// Create a buffer for the full path to the command in this directory
+		char full_path[MAX_NAME];
+		strcpy(full_path, dir);
+		strcat(full_path, "/");
+		strcat(full_path, cmd);
+		
+		// Check if the command exists in this directory
+		if (access(full_path, X_OK) == 0) {
+			// If it does, replace the command string with the full path
+			*str = strdup(full_path);
+			return;
+		}
+		
+		// If not, move on to the next directory in the PATH
+		dir = strtok(NULL, ":");
+	}
+}
+
+/*
+*/
+static void	replace_dollar(char ***str, char *env[])
+{
+	
 }

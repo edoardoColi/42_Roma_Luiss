@@ -12,5 +12,6 @@ Il mio [cursus 42](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi
 > [Piattaforma Mulinette](https://moulinette.42roma.it/)  
 > [42 XP_calculator](https://42evaluators.com/calculator)  
 > [Compilatore e Debugger Online](https://www.onlinegdb.com/)  
+> [Visualizzatore esecuzione](https://pythontutor.com/)  
 > e molto altro *[qui](https://42evaluators.com/usefull_links/)*  
 ------------------------------------------------------------

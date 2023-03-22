@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/12 22:16:58 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/23 00:31:37 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static void	handler(int sig, siginfo_t *siginfo, void *context);
 static void	do_ps1(char *ps1, size_t len, int mod, char *env[]);
 static int	insert_ps1(char *ps1, int p, const char *color);
 static int	is_empty(char *str);
+
+volatile int toknow[2] = {0, 0};// {ret_val, n_cmds}
 
 /*
 WHERE:
@@ -31,7 +33,6 @@ struct sigaction {
 int	main(int argc, char *argv[], char *envp[])
 {
 	int					i;
-	int					ret_val;
 	int					n_cmd;
 	char				ps1[2048];
 	char				*in_line;
@@ -61,7 +62,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (envp[++i])
 		my_env[i] = ft_strdup(envp[i]);
 	my_env[i] = NULL;
-	do_ps1(ps1, 2048, 0, my_env);
+	do_ps1(ps1, 2048, toknow[0], my_env);
 
 	//PROBLEMI
 	// echo prova>">si"
@@ -71,8 +72,8 @@ int	main(int argc, char *argv[], char *envp[])
 	// 
 
 	//TEST memoria
-	// in_line = "export ok=mia si=no forse=no bene=ok osk=as|env|unset si forse|env";
-	// n_cmd = 4;
+	// in_line = "export ok=mia si=no forse=no bene=ok osk=as|env|unset si forse|env|cd ..|pwd|cat <ls > iao <<bene >>bale >ok bene dai";
+	// n_cmd = 7;
 	// parser(in_line, &n_cmd, my_env);
 
 	while ( (in_line = readline(ps1)) != NULL)//per modificare questo faccio una stringa e metto quella
@@ -80,14 +81,15 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!is_empty(in_line))
 		{
 			add_history(in_line);
-			ret_val = analyzer(in_line, &n_cmd);
-			if (ret_val == 0)
-				ret_val = parser(in_line, &n_cmd, my_env);
+			toknow[0] = analyzer(in_line, &n_cmd);
+			toknow[1] = n_cmd;
+			if (toknow[0] == 0)
+				toknow[0] = parser(in_line, &n_cmd, my_env);
 		}
 		else
-			ret_val = 0;
+			toknow[0] = 0;
 		free(in_line);
-		do_ps1(ps1, 2048, ret_val, my_env);
+		do_ps1(ps1, 2048, toknow[0], my_env);
 	}
 	i = -1;
 	while (my_env[++i])
@@ -155,7 +157,7 @@ static void	do_ps1(char *ps1, size_t len, int mod, char *env[])
 	int		j;
 
 	ft_memset(ps1, '\0', len);
-	user = adhoc_getenv("USER", env);//FIX se si fa unset di queste crasha
+	user = adhoc_getenv("USER", env);//TODO FIX se si fa unset di queste crasha
 	pwd = adhoc_getenv("PWD", env);
 	i = -1;
 	if (mod == 0)

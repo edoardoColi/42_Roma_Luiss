@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/12 22:18:01 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/22 20:56:15 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static int	adhoc_main_export(int argc, char *argv[], char *env[]);
 static int	adhoc_main_unset(int argc, char *argv[], char *env[]);
 static int	adhoc_main_env(int argc, char *argv[], char *env[]);
 static int	adhoc_main_exit(t_command *commands, char *env[]);
+
+extern int toknow[2];
 
 /*
 */
@@ -124,11 +126,12 @@ int	adhoc_main_cd(int argc, char *argv[], char *env[])
 				perror("Fail access\n");
 			return 1;
 		}
-		if (chdir(target_path) == -1)
-		{
-			perror("Fail chdir\n");
-			return 1;
-		}
+		if (toknow[1] == 1)
+			if (chdir(target_path) == -1)
+			{
+				perror("Fail chdir\n");
+				return 1;
+			}
 		if (getcwd(target_path, sizeof(target_path)) == NULL)// get new working directory
 			{
 				perror("Fail getcwd\n");
@@ -256,22 +259,18 @@ int	adhoc_main_exit(t_command *commands, char *env[])
 	int	j;
 
 	i = -1;
-	while (++i < commands[0].n_cmds)	//free loop for memory in the commands[i] arrays
+	while (++i < toknow[1])	//free loop for memory in the commands[i] arrays
 	{
 		j = -1;
 		while (++j < MAX_ENTRY)	//free loop for memory in the commands[i].arrays strings
 		{
 			free(commands[i].args[j]);
-			free(commands[i].rdr_in[j]);
-			free(commands[i].rdr_out[j]);
-			free(commands[i].heredoc[j]);
-			free(commands[i].append[j]);
+			free(commands[i].rin_and_heredoc[j]);
+			free(commands[i].rout_and_append[j]);
 		}
 		free(commands[i].args);
-		free(commands[i].rdr_in);
-		free(commands[i].rdr_out);
-		free(commands[i].heredoc);
-		free(commands[i].append);
+		free(commands[i].rin_and_heredoc);
+		free(commands[i].rout_and_append);
 	}
 	free(commands);
 	i = -1;

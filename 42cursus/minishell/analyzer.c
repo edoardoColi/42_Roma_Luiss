@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/11 14:37:57 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/22 01:06:25 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	analyzer(char *cmd, int *n_cmd)
 	quotes_rep = 0;
 	pos = 0;
 	*n_cmd = 1;
+	while (*cmd == ' ' && *cmd != '\0')
+		cmd++;
 	while (cmd[pos] != '\0')
 	{//lista dei caratteri speciali
 		if ((cmd[pos] == '!' ||	//Used for history expansion and negation of commands

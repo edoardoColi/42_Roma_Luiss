@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:05 by ecoli             #+#    #+#             */
-/*   Updated: 2023/03/12 03:56:35 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/22 15:25:53 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ char		*ft_strdup(char *str);
 char		*adhoc_getenv(const char *name, char *env[]);
 size_t		ft_strlen(const char *s);
 size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
-int redirect_o(t_command *cmd);
-int redirect_i(t_command *cmd);
-int pipeout(int fd[2]);
-int pipein(int fd[2]);
 //builtins.c
-int	do_builtin(const char *path, char *const *argv, char *const *env, t_command **commands);
+int			do_builtin(const char *path, char *const *argv, char *const *env, t_command **commands);
+//redirections.c
+int			redirect_out(t_command *cmd);
+int			redirect_in(t_command *cmd);
+int			pipe_out(int fd[2]);
+int			pipe_in(int fd[2]);
 #endif

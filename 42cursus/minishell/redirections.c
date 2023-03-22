@@ -1,7 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
+/*   Updated: 2023/03/22 21:54:27 by eddy             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "global.h"
 #include "functions.h"
 
-int redirect_o(t_command *cmd)
+/*
+*/
+
+
+int redirect_out(t_command *cmd)
 {
 int a;
 int b;
@@ -12,21 +28,21 @@ orig_stdo = dup(1);
 
 b = 0;
 a = 0;
-cmd->rdr_out[0] = "file1.txt";
-cmd->rdr_out[1] = "file2.txt";
-cmd->rdr_out[2] = "file3.txt";
-cmd->rdr_out[3] = NULL;
+cmd->rout_and_append[0] = "file1.txt";
+cmd->rout_and_append[1] = "file2.txt";
+cmd->rout_and_append[2] = "file3.txt";
+cmd->rout_and_append[3] = NULL;
 
-if(cmd->rdr_out[0] != NULL)
+if(cmd->rout_and_append[0] != NULL)
 {
-    while(cmd->rdr_out[a] != NULL)
+    while(cmd->rout_and_append[a] != NULL)
     {
         if(cmd->red_type[b] == 0)
-        opn_fd = open(cmd->rdr_out[a], O_WRONLY | O_CREAT | O_TRUNC , 0644); // 0 to check if is a normal redirection
+        opn_fd = open(cmd->rout_and_append[a], O_WRONLY | O_CREAT | O_TRUNC , 0644); // 0 to check if is a normal redirection
     
         if(cmd->red_type[b] == 1)
-        opn_fd = open(cmd->rdr_out[a], O_WRONLY | O_CREAT | O_APPEND , 0644); // 1 to check if it is an append redirection
-        if (cmd->rdr_out[a + 1])
+        opn_fd = open(cmd->rout_and_append[a], O_WRONLY | O_CREAT | O_APPEND , 0644); // 1 to check if it is an append redirection
+        if (cmd->rout_and_append[a + 1])
         close(opn_fd);
         b++;
         if(opn_fd < 0)
@@ -42,31 +58,31 @@ if(cmd->rdr_out[0] != NULL)
 return (orig_stdo);
 }
 
-int redirect_i(t_command *cmd)
+int redirect_in(t_command *cmd)
 {
     int a;
 
     a = 0;
-    char    *rdr_in[100];
+    char    *rin_and_heredoc[100];
     int fd;
-    cmd->rdr_in[0] = "file1.txt";
-    cmd->rdr_in[1] = "file2.txt";
-    cmd->rdr_in[2] = "file3.txt";
-    cmd->rdr_in[3] = NULL;
-    if(cmd->rdr_in[a])
+    cmd->rin_and_heredoc[0] = "file1.txt";
+    cmd->rin_and_heredoc[1] = "file2.txt";
+    cmd->rin_and_heredoc[2] = "file3.txt";
+    cmd->rin_and_heredoc[3] = NULL;
+    if(cmd->rin_and_heredoc[a])
     {
-        while (cmd->rdr_in[a])
+        while (cmd->rin_and_heredoc[a])
         {
             a++;
         }
-        printf("%s", cmd->rdr_in[a - 1]);
-        if (access(cmd->rdr_in[a - 1] , R_OK ) < 0)
+        printf("%s", cmd->rin_and_heredoc[a - 1]);
+        if (access(cmd->rin_and_heredoc[a - 1] , R_OK ) < 0)
         {
             write(2, "No such file or directory\n" ,25 );
         }
         else
         {
-            fd = open(cmd->rdr_in[a - 1], O_RDONLY);
+            fd = open(cmd->rin_and_heredoc[a - 1], O_RDONLY);
         if(fd < 0)
         {
             write(2, "OPEN ERROR\n", 11);
@@ -78,7 +94,7 @@ int redirect_i(t_command *cmd)
     return (0);
 }
 
-int pipeout(int fd[2])
+int pipe_out(int fd[2])
 {
     close(fd[0]);
     if ( dup2(fd[1], 1) == - 1)
@@ -90,7 +106,7 @@ int pipeout(int fd[2])
     return(0);
 }
 
-int pipein(int fd[2])
+int pipe_in(int fd[2])
 {
     close(fd[1]);
     if ( dup2(fd[0], 0 )== - 1)
@@ -102,6 +118,7 @@ int pipein(int fd[2])
     close(fd[0]);
     return(0);
 }
+
 //  int set_pipeline(t_command cmd, int i, int pipes[][2])
 //  {
 

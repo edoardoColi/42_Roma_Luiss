@@ -3,7 +3,7 @@ CC		= gcc
 # Extra flags to give to the C preprocessor and programs that use it
 CPPFLAGS= -I .
 # Extra flags to give to the processor C compiler
-CFLAGS	= -g 
+CFLAGS	= -g
 #-Wall -Werror -Wextra
 # Optimization flag to give to the processor C compiler
 COPTFLAGS	= -O3
