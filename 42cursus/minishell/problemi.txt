@@ -1,0 +1,36 @@
+Comandi da eseguire e confrontare con bash.................
+
+echo prova>">si"
+cat '>si'
+cat ">si"
+cat >si
+
+export casa=CASA
+casa=bella
+
+cd "casa mi"'a molt"o bella'
+
+Risolti....................................................
+
+export casa=CASA
+export cassa2=$casa.p"\="oi
+export cassa2=$cas"a.p\="oi
+export cassa2=$cas"a.p\  =  "oi
+
+echo prova>">si"
+
+export bene
+export bene=
+export bene=si
+
+cd .. | pwd
+
+echo $casa?
+echo $casa?mia
+echo $?mia
+
+
+
+
+
+

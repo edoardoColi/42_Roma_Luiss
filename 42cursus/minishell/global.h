@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:39 by ecoli             #+#    #+#             */
-/*   Updated: 2023/03/23 00:43:56 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 00:24:00 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ typedef struct s_command
 	char	**args;
 	char	**rin_and_heredoc;	// < e <<
 	char	**rout_and_append;	// > e >>
-	int		*red_type;
-	int		fd[2];
+	int		*red_type;//SFARINA
+	int		fd[2];//SFARINA
 }	t_command;
 
 #endif

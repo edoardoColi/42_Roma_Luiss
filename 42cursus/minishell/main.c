@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/23 00:31:37 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 03:41:07 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	main(int argc, char *argv[], char *envp[])
 	ft_memset(&act, '\0', sizeof(act));
 	act.sa_sigaction = &handler;				//Meaningful only when estabilishing a signal handler. More in 'man sigaction'
 	act.sa_flags = SA_SIGINFO;					//When the SA_SIGINFO flag is specified in act.sa_flags, the signal handler address is passed via the act.sa_sigaction field. This handler takes three arguments. More in 'man sigaction'
+	sigemptyset(&act.sa_mask);
 	if (sigaction(SIGINT, &act, NULL) == -1)	//Examine and change a signal action
 	{
 		perror("Fail sigaction(SIGINT)\n");
@@ -64,13 +65,6 @@ int	main(int argc, char *argv[], char *envp[])
 	my_env[i] = NULL;
 	do_ps1(ps1, 2048, toknow[0], my_env);
 
-	//PROBLEMI
-	// echo prova>">si"
-	// cat '>si'
-	// cat ">si"
-	// cat >si
-	// 
-
 	//TEST memoria
 	// in_line = "export ok=mia si=no forse=no bene=ok osk=as|env|unset si forse|env|cd ..|pwd|cat <ls > iao <<bene >>bale >ok bene dai";
 	// n_cmd = 7;
@@ -81,9 +75,8 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!is_empty(in_line))
 		{
 			add_history(in_line);
-			toknow[0] = analyzer(in_line, &n_cmd);
 			toknow[1] = n_cmd;
-			if (toknow[0] == 0)
+			if (analyzer(in_line, &n_cmd) == 0)
 				toknow[0] = parser(in_line, &n_cmd, my_env);
 		}
 		else
@@ -117,16 +110,21 @@ typedef struct {
 	int si_band;
 } siginfo_t;
 */
-static void	handler(int sig, siginfo_t *siginfo, void *context)//TODO attualmente printano solo di essere stati ricevuti
+static void	handler(int sig, siginfo_t *siginfo, void *context)
 {
 	(void)context;								//Cast for unused warning
 	if (sig == SIGINT)//codice 2
 	{
-		printf("Premuto ctrl-C\n");//da cambiare con quello che devono effetivamente fare
+		printf("\n");
+		rl_on_new_line();//TODO questa non se sono tipo con 'cat' senno ne vengono due
+		rl_replace_line("", 0);
+		rl_redisplay();
+		toknow[0] = 130;
 	}
 	if (sig == SIGQUIT)//codice 3
-	{
-		printf("Premuto ctrl-\\\n");//da cambiare con quello che devono effetivamente fare
+	{//TODO questo solo se sono bloccato tipo con 'cat', se non ho scritto nulla non fa niente, senno quitta la shell(?)
+		printf("Quit (core dumped)\n");
+		toknow[0] = 131;//TODO non viene visto quando viene fatta la nuova riga
 	}
 }
 
@@ -157,8 +155,14 @@ static void	do_ps1(char *ps1, size_t len, int mod, char *env[])
 	int		j;
 
 	ft_memset(ps1, '\0', len);
-	user = adhoc_getenv("USER", env);//TODO FIX se si fa unset di queste crasha
-	pwd = adhoc_getenv("PWD", env);
+	if (adhoc_getenv("USER", env))
+		user = adhoc_getenv("USER", env);
+	else
+		user = "";
+	if (adhoc_getenv("PWD", env))
+		pwd = adhoc_getenv("PWD", env);
+	else
+		pwd = "";
 	i = -1;
 	if (mod == 0)
 		i += insert_ps1(ps1, i + 1, "\U0001F607");//emoji angel face

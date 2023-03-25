@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/12 21:38:58 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 03:38:24 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,17 @@ int	adhoc_setenv(const char *name, char *value, char *env[])
 }
 
 /*
+*/
+size_t	ft_charcat(char *dst, const char src)
+{
+	size_t	dst_len;
+
+	dst_len = ft_strlen(dst);
+	dst[dst_len] = src;
+	return (dst_len + 1);
+}
+
+/*
 My own function implementing the original one.
 For more use "man memset" 
 */
@@ -167,6 +178,13 @@ size_t	ft_strlen(const char *s)
 }
 
 /*
+*/
+int	adhoc_isalpha(int c)
+{
+	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'));
+}
+
+/*
 My own function implementing the original one.
 For more use "man strncmp" 
 */
@@ -189,7 +207,7 @@ char	*ft_strdup(char *str)
 	int		i;
 	char	*copy;
 
-	copy = (char*) malloc( sizeof(char) *MAX_NAME);//TODO controlla return
+	copy = (char*) malloc( sizeof(char) *MAX_NAME);
 	if (!copy)
 	{
 		perror("Fail malloc\n");
@@ -202,4 +220,60 @@ char	*ft_strdup(char *str)
 	}
 	copy[i] = '\0';
 	return (copy);
+}
+
+/*
+n: the integer to convert.
+Return the string representing the integer.
+NULL if the allocation fails.
+Allocates (with malloc(3)) and returns a string
+representing the integer received as an argument.
+Negative numbers must be handled.
+*/
+char	*ft_itoa(int n)
+{
+	char	*str;		//Return value
+	size_t	len;		//Size of the number as a string
+	long	n_long;		//We use long to implicitly manage the INT_MIN value
+
+	n_long = (long) n;
+	len = size_num(n_long);
+	str = malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	str[len--] = '\0';
+	if (n_long == 0)
+		str[0] = '0';
+	if (n_long < 0)
+	{
+		str[0] = '-';
+		n_long = n_long * -1;
+	}
+	while (n_long > 0)
+	{
+		str[len] = (n_long % 10) + '0';		//Adding the offset of 0, according to the asci table, we get the number as a char
+		n_long = n_long / 10;
+		len--;
+	}
+	return (str);
+}
+
+/*
+n: the integer to convert.
+Return the integer.
+Count and return the size of the number in order to become a char.
+*/
+size_t	size_num(int n)
+{
+	size_t	i;
+
+	i = 0;
+	if (n <= 0)
+		i++;
+	while (n != 0)
+	{
+		n = n / 10;
+		i++;
+	}
+	return (i);
 }

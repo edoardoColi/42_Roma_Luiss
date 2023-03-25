@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:05 by ecoli             #+#    #+#             */
-/*   Updated: 2023/03/22 15:25:53 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 03:20:10 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int			setup_spaces(char *str);
 int			analyzer(char *cmd, int *n_cmd);
 //utils.c
 int			ft_isspace(char c);
+int			adhoc_isalpha(int c);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			adhoc_setenv(const char *name, char *value, char *env[]);
 void		*ft_memset(void *b, int c, size_t len);
@@ -28,6 +29,9 @@ char		*ft_strdup(char *str);
 char		*adhoc_getenv(const char *name, char *env[]);
 size_t		ft_strlen(const char *s);
 size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
+size_t		ft_charcat(char *dst, const char src);
+char		*ft_itoa(int n);
+size_t		size_num(int n);
 //builtins.c
 int			do_builtin(const char *path, char *const *argv, char *const *env, t_command **commands);
 //redirections.c

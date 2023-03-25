@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/23 00:01:12 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 03:38:44 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ static void	fill_spaces(char *str);
 static void	trim_spaces(char *str);
 static void	squeez_spaces(char *str);
 static void	expand_cmd(char **str, char *env[]);
-static void	replace_dollar(char ***str, char *env[]);
+static void	replace_dollar(t_command *command, char *env[]);
+
+extern int toknow[2];
 
 /*
 */
@@ -55,13 +57,13 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 			ft_memset(commands[i].rin_and_heredoc[j], '\0', MAX_NAME);
 			ft_memset(commands[i].rout_and_append[j], '\0', MAX_NAME);
 		}
-		//TODO inizializza *red_type
-		//TODO inizializza fd
+		//SFARINA inizializza *red_type
+		//SFARINA inizializza fd
 	}
 	i = -1;
 	while (++i < *n_cmds)
 	{
-		if (fill_cmd(&commands[i], i, cmds) != 0)//TODO dividere anche in rdr e heredoc non tutto in args
+		if (fill_cmd(&commands[i], i, cmds) != 0)
 		{
 			perror("Fail fill_cmd\n");
 			i = -1;
@@ -83,7 +85,7 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 			exit(1);
 		}
 ////////////////DEBUG CMDs
-		if(1){
+		if(0){
 			int p=0;
 			int sbit=0;
 			while(p<10)
@@ -127,8 +129,8 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 ///////////////
 	i = -1;
 	while (++i < *n_cmds)
-	{//TODO non ho alcuna relazione tra esecuzione comando prima e dopo
-		//TODO espando $ a meno che non sono in '...'
+	{//SFARINA non ho alcuna relazione tra esecuzione comando prima e dopo (pipe)
+		replace_dollar(&commands[i], env);
 		//TODO levo gli apici dagli args, il primo e l'ultimo + tutti quelli accoppiati (tipo: cd "casa mi"'a molt"o bella')
 		if (*n_cmds == 1)
 			ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
@@ -173,7 +175,7 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 				while(p<10)
 				{
 					if(commands[kk].args[p] && sbit==0)
-						printf("args '%-10s' %d-%d\n",commands[kk].args[p],i,p);
+						printf("args '%-10s' %d-%d\n",commands[kk].args[p],kk,p);
 					else
 						sbit=1;
 					p++;
@@ -182,7 +184,7 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 				while(p<10)
 				{
 					if(commands[kk].rin_and_heredoc[p] && sbit==0)
-						printf("rin_and_heredoc '%-10s' %d-%d\n",commands[kk].rin_and_heredoc[p],i,p);
+						printf("rin_and_heredoc '%-10s' %d-%d\n",commands[kk].rin_and_heredoc[p],kk,p);
 					else
 						sbit=1;
 					p++;
@@ -191,7 +193,7 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 				while(p<10)
 				{
 					if(commands[kk].rout_and_append[p] && sbit==0)
-						printf("rout_and_append '%-10s' %d-%d\n",commands[kk].rout_and_append[p],i,p);
+						printf("rout_and_append '%-10s' %d-%d\n",commands[kk].rout_and_append[p],kk,p);
 					else
 						sbit=1;
 					p++;
@@ -263,8 +265,6 @@ int	fill_cmd(t_command *to_fill, int n_cmd, char *in_line)
 	tmp[1] = 0;
 	tmp[2] = 0;
 	while (cmd[i])
-	//voglio che se sono simboli $ siano modificate						(faccio dopo, prima di eseguirli)//TODO meglio qui
-	//voglio che se sono in quotes restino uguali senza le estremita'	(faccio dopo, prima di eseguirli)//TODO meglio qui
 	{
 		if (cmd[i] == '\'' && quotes_rep % 2 == 0)
 			quote_rep++;
@@ -287,9 +287,9 @@ int	fill_cmd(t_command *to_fill, int n_cmd, char *in_line)
 	i = -1;
 	j = tmp[0];
 	tmp[0] = 0;
-	while (++i <= j)	// loop per riempire le redirections
+	while (++i <= j)	// loop per riempire rin_and_heredoc e rout_and_append
 	{
-		if (to_fill->args[i][0] == '<')
+		if (to_fill->args[i][0] == '<')//TODO se ho un heredoc deve partire 'getnextline' e li dentro tutte le variabili con il dollaro si espandono
 		{
 			ft_strlcat(to_fill->rin_and_heredoc[tmp[1]], to_fill->args[i], MAX_NAME);
 			(tmp[1])++;
@@ -460,7 +460,7 @@ static void	squeez_spaces(char *str)
 static void	expand_cmd(char **str, char *env[])//TODO non posso usare queste funzioni, pero funziona
 {
 	char* cmd = *str;
-	char* path_env = adhoc_getenv("PATH", env);
+	char* path_env = adhoc_getenv("PATH", env);//TODO prima di assegnarlo controlla non NULL
 	
 	
 	if (!path_env) {// If the PATH environment variable isn't set, return
@@ -494,7 +494,171 @@ static void	expand_cmd(char **str, char *env[])//TODO non posso usare queste fun
 
 /*
 */
-static void	replace_dollar(char ***str, char *env[])
+static void	replace_dollar(t_command *command, char *env[])
 {
-	
+	int		i;
+	int		j;
+	int		flag;
+	int		quote;
+	char	env_var[MAX_NAME];
+	char	new_cmd[MAX_NAME];
+
+	i = -1;
+	while (command->args[++i])
+	{
+		ft_memset(new_cmd, '\0', MAX_NAME);//pulisco prima di copiare sopra
+		ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di copiare sopra
+		j = -1;
+		flag = 0;
+		quote = 0;
+		while (command->args[i][++j] != '\0')
+		{
+			if (command->args[i][j] == '\'')
+				quote++;
+			if (quote%2 == 0)
+			{
+				if (command->args[i][j] == '$')
+				{
+					j++;
+					while ((adhoc_isalpha(command->args[i][j]) || command->args[i][j] == '?') && command->args[i][j] != '\0')
+					{
+						if (flag == 0)
+							flag = 1;
+						if (command->args[i][j] == '?' && env_var[0] == '\0')
+						{
+							ft_charcat(env_var, command->args[i][j]);
+							break;
+						}
+						else if (command->args[i][j] == '?')
+							break;
+						else
+							ft_charcat(env_var, command->args[i][j]);
+						j++;
+					}
+					if (flag == 1)
+					{
+						if (env_var[0] == '?')
+						{
+							ft_strlcat(new_cmd, ft_itoa(toknow[0]), MAX_NAME);
+							j++;
+						}
+						else if (adhoc_getenv(env_var, env))
+							ft_strlcat(new_cmd, adhoc_getenv(env_var, env), MAX_NAME);
+						flag = 0;
+						ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di riutilizzare
+					}
+				}
+				if (command->args[i][j] == '$')
+					j--;
+				else
+					ft_charcat(new_cmd, command->args[i][j]);
+			}
+			else
+				ft_charcat(new_cmd, command->args[i][j]);
+		}
+		ft_memset(command->args[i], '\0', MAX_NAME);//pulisco prima di copiare sopra
+		ft_strlcat(command->args[i], new_cmd, MAX_NAME);
+	}
+	i = -1;
+	while (command->rin_and_heredoc[++i])
+	{
+		ft_memset(new_cmd, '\0', MAX_NAME);//pulisco prima di copiare sopra
+		ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di copiare sopra
+		j = -1;
+		flag = 0;
+		quote = 0;
+		while (command->args[i][++j] != '\0')
+		{
+			if (command->args[i][j] == '\'')
+				quote++;
+			if (quote%2 == 0)
+			{
+				if (command->args[i][j] == '$')
+				{
+					j++;
+					while (adhoc_isalpha(command->args[i][j]) && command->args[i][j] != '\0')
+					{
+						if (flag == 0)
+							flag = 1;
+						if (command->args[i][j] == '?' && env_var[0] == '\0')
+						{
+							ft_charcat(env_var, command->args[i][j]);
+							break;
+						}
+						else if (command->args[i][j] == '?')
+							break;
+						else
+							ft_charcat(env_var, command->args[i][j]);
+						j++;
+					}
+					if (flag == 1)
+					{
+						if (adhoc_getenv(env_var, env))
+							ft_strlcat(new_cmd, adhoc_getenv(env_var, env), MAX_NAME);
+						flag = 0;
+						ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di riutilizzare
+					}
+				}
+				if (command->args[i][j] == '$')
+					j--;
+				else
+					ft_charcat(new_cmd, command->args[i][j]);
+			}
+			else
+				ft_charcat(new_cmd, command->args[i][j]);
+		}
+		ft_memset(command->args[i], '\0', MAX_NAME);//pulisco prima di copiare sopra
+		ft_strlcat(command->args[i], new_cmd, MAX_NAME);
+	}
+	i = -1;
+	while (command->rout_and_append[++i])
+	{
+		ft_memset(new_cmd, '\0', MAX_NAME);//pulisco prima di copiare sopra
+		ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di copiare sopra
+		j = -1;
+		flag = 0;
+		quote = 0;
+		while (command->args[i][++j] != '\0')
+		{
+			if (command->args[i][j] == '\'')
+				quote++;
+			if (quote%2 == 0)
+			{
+				if (command->args[i][j] == '$')
+				{
+					j++;
+					while (adhoc_isalpha(command->args[i][j]) && command->args[i][j] != '\0')
+					{
+						if (flag == 0)
+							flag = 1;
+						if (command->args[i][j] == '?' && env_var[0] == '\0')
+						{
+							ft_charcat(env_var, command->args[i][j]);
+							break;
+						}
+						else if (command->args[i][j] == '?')
+							break;
+						else
+							ft_charcat(env_var, command->args[i][j]);
+						j++;
+					}
+					if (flag == 1)
+					{
+						if (adhoc_getenv(env_var, env))
+							ft_strlcat(new_cmd, adhoc_getenv(env_var, env), MAX_NAME);
+						flag = 0;
+						ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di riutilizzare
+					}
+				}
+				if (command->args[i][j] == '$')
+					j--;
+				else
+					ft_charcat(new_cmd, command->args[i][j]);
+			}
+			else
+				ft_charcat(new_cmd, command->args[i][j]);
+		}
+		ft_memset(command->args[i], '\0', MAX_NAME);//pulisco prima di copiare sopra
+		ft_strlcat(command->args[i], new_cmd, MAX_NAME);
+	}
 }
