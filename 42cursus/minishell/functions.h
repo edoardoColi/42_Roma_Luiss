@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:05 by ecoli             #+#    #+#             */
-/*   Updated: 2023/03/25 03:20:10 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 15:51:45 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
 size_t		ft_charcat(char *dst, const char src);
 char		*ft_itoa(int n);
 size_t		size_num(int n);
+char		*ft_strtok(char *str, const char *delim, char **saveptr);
+size_t		ft_strlcpy(char *dst, const char *src, size_t size);
+char		*ft_strchr(const char *str, int c);
 //builtins.c
 int			do_builtin(const char *path, char *const *argv, char *const *env, t_command **commands);
 //redirections.c

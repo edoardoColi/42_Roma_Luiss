@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/25 03:41:07 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 15:57:04 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	main(int argc, char *argv[], char *envp[])
 	do_ps1(ps1, 2048, toknow[0], my_env);
 
 	//TEST memoria
-	// in_line = "export ok=mia si=no forse=no bene=ok osk=as|env|unset si forse|env|cd ..|pwd|cat <ls > iao <<bene >>bale >ok bene dai";
+	// in_line = "export ok=mia si=no forse=no bene=ok osk=as|envX|unset si forse|envX|cd ..|pwd|cat <ls > iao <<bene >>bale >ok bene dai";
 	// n_cmd = 7;
 	// parser(in_line, &n_cmd, my_env);
 
@@ -122,9 +122,9 @@ static void	handler(int sig, siginfo_t *siginfo, void *context)
 		toknow[0] = 130;
 	}
 	if (sig == SIGQUIT)//codice 3
-	{//TODO questo solo se sono bloccato tipo con 'cat', se non ho scritto nulla non fa niente, senno quitta la shell(?)
+	{//TODO questo solo se sono bloccato tipo con 'cat',inoltre se non ho scritto nulla non fa niente, senno da sola quitta la shell(?)
 		printf("Quit (core dumped)\n");
-		toknow[0] = 131;//TODO non viene visto quando viene fatta la nuova riga
+		toknow[0] = 131;
 	}
 }
 

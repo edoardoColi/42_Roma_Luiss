@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/25 03:38:24 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 15:55:31 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ char	*adhoc_getenv(const char *name, char *env[])
 	int	len;
 	len = ft_strlen(name);
 	i = 0;
-	while (env[i] != NULL) {
+	while (env[i] != NULL)
+	{
 		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
 		{
 			return (&(env[i][len+1]));
@@ -53,7 +54,8 @@ int	adhoc_setenv(const char *name, char *value, char *env[])
 	pos = -1;
 	len = ft_strlen(name);
 	i = 0;
-	while (env[i] != NULL) {
+	while (env[i] != NULL)
+	{
 		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
 		{
 			pos = i;
@@ -82,6 +84,7 @@ int	adhoc_setenv(const char *name, char *value, char *env[])
 			i++;
 		}
 		tmp[i] = '\0';
+		free(env[pos]);
 		env[pos] = ft_strdup(tmp);//internamente usa una malloc
 		env[pos + 1] = NULL;
 	}
@@ -214,7 +217,8 @@ char	*ft_strdup(char *str)
 		return (NULL);
 	}
 	i = 0;
-	while (str[i] != '\0' && i < MAX_NAME - 1) {
+	while (str[i] != '\0' && i < MAX_NAME - 1)
+	{
 		copy[i] = str[i];
 		i++;
 	}
@@ -276,4 +280,83 @@ size_t	size_num(int n)
 		i++;
 	}
 	return (i);
+}
+
+/*
+*/
+char	*ft_strtok(char *str, const char *delim, char **saveptr)
+{
+	size_t	len;
+	size_t	token_len;
+	char	*next_delim;
+	char	*result;
+	char	*token;
+
+	if (str == NULL)	// If `str` is NULL, continue parsing from the last saved position
+		str = *saveptr;
+	if (str == NULL || *str == '\0')
+	{
+		*saveptr = NULL;
+		return NULL;
+	}
+	next_delim = ft_strchr(str, *delim);// Find the next delimiter in the string
+	if (next_delim == NULL)// If there are no more delimiters, return the remainder of the string
+	{
+		len = ft_strlen(str);
+		result = malloc(len + 1);
+		if (!result)
+		{
+			return (NULL);
+		}
+		ft_strlcpy(result, str, len + 1);
+		*saveptr = NULL;
+		return result;
+	}
+	token_len = next_delim - str;
+	token = malloc(token_len + 1);// Allocate memory for the token and copy it
+	if (!token)
+	{
+		return (NULL);
+	}
+	ft_strlcpy(token, str, token_len + 1);
+	*saveptr = next_delim + 1;// Update the save pointer and return the token
+	return token;
+}
+
+/*
+*/
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t i;
+	for (i = 0; i < size - 1 && src[i] != '\0'; i++)
+	{
+		dst[i] = src[i];
+	}
+	dst[i] = '\0';
+	while (src[i] != '\0')
+	{
+		i++;
+	}
+	return i;
+}
+
+/*
+My own function implementing the original one.
+For more use "man strchr" 
+*/
+char	*ft_strchr(const char *str, int c)
+{
+	while (*str != '\0')// Search for the character in the string
+	{
+		if (*str == c)
+		{
+			return (char *)str;
+		}
+		str++;
+	}
+	if (c == '\0')// Check if the character is the null terminator
+	{
+		return (char *)str;
+	}
+	return NULL;// Character not found
 }

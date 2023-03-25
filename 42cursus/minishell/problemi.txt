@@ -8,7 +8,6 @@ cat >si
 export casa=CASA
 casa=bella
 
-cd "casa mi"'a molt"o bella'
 
 Risolti....................................................
 
@@ -29,8 +28,14 @@ echo $casa?
 echo $casa?mia
 echo $?mia
 
-
-
+echo ciao mamma" be/"sd's\/\@#$?><"'
+echo $PWD "$PWD sa"
+echo ciamo $|$PWD
+cd "casa mi"'a molt"o bella'
+cd <"casa mi"'a molt"o bella'
+cd >"casa mi"'a molt"o bella'
+cd >>"casa mi"'a molt"o bella'
+cd <<"casa mi"'a molt"o bella'
 
 
 

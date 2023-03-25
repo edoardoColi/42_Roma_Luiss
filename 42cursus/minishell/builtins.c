@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/25 00:42:51 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/25 14:18:58 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,6 @@ int	adhoc_main_export(int argc, char *argv[], char *env[])
 		}
 		if (flag != -1 && flag != 0)
 		{
-			printf("Qui ho %s\n",val);
 			adhoc_setenv(name, val, env);
 		}
 	}
