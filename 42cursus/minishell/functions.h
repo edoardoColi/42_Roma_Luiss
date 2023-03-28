@@ -38,8 +38,12 @@ char		*ft_strchr(const char *str, int c);
 //builtins.c
 int			do_builtin(const char *path, char *const *argv, char *const *env, t_command **commands);
 //redirections.c
-int			redirect_out(t_command *cmd);
-int			redirect_in(t_command *cmd);
+int			redirect_o(t_command *cmd);
+int			redirect_i(t_command *cmd);
 int			pipe_out(int fd[2]);
 int			pipe_in(int fd[2]);
+int heredoc(t_command *cmd, int a);
+int redirectionin_type(t_command *cmd);
+int redirectionout_type(t_command *cmd);
+void create_pipe(t_command *cmd, int a);
 #endif

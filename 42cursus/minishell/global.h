@@ -25,6 +25,7 @@
 # include <sys/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <string.h>
 
 # define MAX_ENTRY	128
 # define MAX_NAME	4096
@@ -46,7 +47,8 @@ typedef struct s_command
 	char	**args;
 	char	**rin_and_heredoc;	// < e <<
 	char	**rout_and_append;	// > e >>
-	int		*red_type;//SFARINA
+	int		*redin_type;//SFARINA
+	int		*redout_type;int		*redint_type;
 	int		fd[2];//SFARINA
 }	t_command;
 
