@@ -117,7 +117,7 @@ static void	handler(int sig, siginfo_t *siginfo, void *context)
 	{
 		printf("\n");
 		rl_on_new_line();//TODO questa non se sono tipo con 'cat' senno ne vengono due
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_redisplay();
 		toknow[0] = 130;
 	}

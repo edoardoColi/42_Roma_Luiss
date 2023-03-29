@@ -129,16 +129,26 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 	}
 ///////////////
 	i = -1;
+
+int fd[*n_cmds - 1][2];
+
 	while (++i < *n_cmds)
 	{//SFARINA non ho alcuna relazione tra esecuzione comando prima e dopo (pipe)
-		replace_dollar(&commands[i], env);
+	 commands[i].redin_type=  malloc(sizeof(int) * 50);
+commands[i].redout_type=  malloc(sizeof(int) * 50); //to free!redirectionin_type(&commands[i]);
+	 redirectionout_type(&commands[i]);
+	 redirectionin_type(&commands[i]);
+	replace_dollar(&commands[i], env);
 		rem_quotes(&commands[i]);
-		if (*n_cmds == 1)
+		//  create_pipe(commands, i);
+		if (*n_cmds == 1 && commands[i].rout_and_append[0] == NULL)
 			ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
 		else
 			ret = 2;
 		if (ret == 2)	//il comando non e' builtin oppure e' in pipeline
 		{
+			if(fd[i])	 
+			pipe(fd[i]);
 			pid = fork();
 			if (pid == -1){
 				perror("Fail fork\n");
@@ -146,6 +156,16 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 			}
 			if (pid == 0) //processo figlio
 			{
+			printf("redin :%s\n", commands[i].rin_and_heredoc[0]);
+			printf("redin :%d\n", commands[i].redin_type[0]);
+			if(commands[i].rin_and_heredoc[0])
+			redirect_i(&commands[i]);
+			if(i > 0 && !commands[i].rin_and_heredoc[0])
+			pipe_in(fd[i - 1]);
+			if(commands[i].rout_and_append[0])
+			redirect_o(&commands[i]);
+		 if(i + 1 < *n_cmds && !commands[i].rout_and_append[0] )
+			pipe_out(fd[i]);
 				ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
 				if (ret == 2)	//il comando non e' builtin
 				{
@@ -178,6 +198,8 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 			else //processo padre
 			{
 				waitpid(pid, &pid_ret, 0);
+				close(fd[i][1]);
+				 unlink("tmp"); //removing tmpfile of heredoc
 				if (WIFEXITED(pid_ret) && WEXITSTATUS(pid_ret) != 0)//figlio ritorna con exit()
 					ret = WEXITSTATUS(pid_ret);
 				else
