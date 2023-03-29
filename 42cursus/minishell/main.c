@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/25 15:57:04 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/29 23:40:24 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	do_ps1(char *ps1, size_t len, int mod, char *env[]);
 static int	insert_ps1(char *ps1, int p, const char *color);
 static int	is_empty(char *str);
 
-volatile int toknow[2] = {0, 0};// {ret_val, n_cmds}
+volatile int g_toknow[2] = {0, 0};// {ret_val, n_cmds}
 
 /*
 WHERE:
@@ -32,6 +32,8 @@ struct sigaction {
 */
 int	main(int argc, char *argv[], char *envp[])
 {
+	(void)argc;								//Cast for unused warning
+	(void)argv;								//Cast for unused warning
 	int					i;
 	int					n_cmd;
 	char				ps1[2048];
@@ -63,7 +65,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (envp[++i])
 		my_env[i] = ft_strdup(envp[i]);
 	my_env[i] = NULL;
-	do_ps1(ps1, 2048, toknow[0], my_env);
+	do_ps1(ps1, 2048, g_toknow[0], my_env);
 
 	//TEST memoria
 	// in_line = "export ok=mia si=no forse=no bene=ok osk=as|envX|unset si forse|envX|cd ..|pwd|cat <ls > iao <<bene >>bale >ok bene dai";
@@ -75,19 +77,20 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!is_empty(in_line))
 		{
 			add_history(in_line);
-			toknow[1] = n_cmd;
+			g_toknow[1] = n_cmd;
 			if (analyzer(in_line, &n_cmd) == 0)
-				toknow[0] = parser(in_line, &n_cmd, my_env);
+				g_toknow[0] = parser(in_line, &n_cmd, my_env);
 		}
 		else
-			toknow[0] = 0;
+			g_toknow[0] = 0;
 		free(in_line);
-		do_ps1(ps1, 2048, toknow[0], my_env);
+		do_ps1(ps1, 2048, g_toknow[0], my_env);
 	}
 	i = -1;
 	while (my_env[++i])
 		free(my_env[i]);
 	free(my_env);
+	rl_clear_history();
 	printf("\n");//readline fallisce quando si preme ctrl-D (EOF) ergo usciamo dal while
 	return (0);
 }
@@ -113,18 +116,19 @@ typedef struct {
 static void	handler(int sig, siginfo_t *siginfo, void *context)
 {
 	(void)context;								//Cast for unused warning
+	(void)siginfo;								//Cast for unused warning
 	if (sig == SIGINT)//codice 2
 	{
 		printf("\n");
 		rl_on_new_line();//TODO questa non se sono tipo con 'cat' senno ne vengono due
-		//rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
-		toknow[0] = 130;
+		g_toknow[0] = 130;
 	}
 	if (sig == SIGQUIT)//codice 3
 	{//TODO questo solo se sono bloccato tipo con 'cat',inoltre se non ho scritto nulla non fa niente, senno da sola quitta la shell(?)
 		printf("Quit (core dumped)\n");
-		toknow[0] = 131;
+		g_toknow[0] = 131;
 	}
 }
 
@@ -150,9 +154,8 @@ static void	do_ps1(char *ps1, size_t len, int mod, char *env[])
 {
 	char	*pwd;
 	char	*user;
-	char	*desktop_session;
-	int		i;
-	int		j;
+	size_t	i;
+	size_t	j;
 
 	ft_memset(ps1, '\0', len);
 	if (adhoc_getenv("USER", env))

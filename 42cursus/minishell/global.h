@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:39 by ecoli             #+#    #+#             */
-/*   Updated: 2023/03/25 14:12:23 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/30 00:41:50 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # include <sys/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <string.h>
 
 # define MAX_ENTRY	128
 # define MAX_NAME	4096
@@ -47,9 +46,9 @@ typedef struct s_command
 	char	**args;
 	char	**rin_and_heredoc;	// < e <<
 	char	**rout_and_append;	// > e >>
-	int		*redin_type;//SFARINA
-	int		*redout_type;int		*redint_type;
-	int		fd[2];//SFARINA
+	int		redin_type[MAX_ENTRY];	//per ricordare quale append a quale override
+	int		redout_type[MAX_ENTRY];	//per ricordare quale file e quale heredoc
+	int		fd[2];
 }	t_command;
 
 #endif

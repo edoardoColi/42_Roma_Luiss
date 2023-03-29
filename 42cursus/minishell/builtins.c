@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/25 14:18:58 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/29 23:39:44 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,17 @@ static int	adhoc_main_unset(int argc, char *argv[], char *env[]);
 static int	adhoc_main_env(int argc, char *argv[], char *env[]);
 static int	adhoc_main_exit(t_command *commands, char *env[]);
 
-extern int toknow[2];
+extern int g_toknow[2];
 
 /*
 */
 int	do_builtin(const char *path, char *const *argv, char *const *env, t_command **commands)
 {
-	int	len;
 	int	argc;
 
 	argc = 0;
 	while (argv[argc])
 		argc++;
-	len = ft_strlen(path);
 	if (ft_strncmp(path, "echo\0", 5) == 0 || ft_strncmp(path, "cd\0", 3) == 0 || ft_strncmp(path, "pwd\0", 4) == 0 || ft_strncmp(path, "export\0", 7) == 0 || ft_strncmp(path, "unset\0", 6) == 0 || ft_strncmp(path, "env\0", 4) == 0 || ft_strncmp(path, "exit\0", 5) == 0)
 	{
 		if (ft_strncmp(path, "echo\0", 5) == 0)
@@ -59,10 +57,11 @@ int	do_builtin(const char *path, char *const *argv, char *const *env, t_command 
 */
 int	adhoc_main_echo(int argc, char *argv[], char *env[])
 {
+	(void)env;								//Cast for unused warning
 	int i;
 	int no_newline = 0;
 
-	if (argc > 1 && ft_strncmp(argv[1], "-n\0", 3) == 0)// Check for the -n option
+	while (argc > 1 && ft_strncmp(argv[1], "-n\0", 3) == 0)// Check for the -n option
 	{
 		no_newline = 1;
 		argc--;
@@ -126,7 +125,7 @@ int	adhoc_main_cd(int argc, char *argv[], char *env[])
 				perror("Fail access\n");
 			return 1;
 		}
-		if (toknow[1] == 1)
+		if (g_toknow[1] == 1)
 			if (chdir(target_path) == -1)
 			{
 				perror("Fail chdir\n");
@@ -147,6 +146,9 @@ int	adhoc_main_cd(int argc, char *argv[], char *env[])
 */
 int	adhoc_main_pwd(int argc, char *argv[], char *env[])
 {
+	(void)argc;								//Cast for unused warning
+	(void)argv;								//Cast for unused warning
+	(void)env;								//Cast for unused warning
 	char	cwd[MAX_NAME];
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)// get new working directory
@@ -215,6 +217,7 @@ int	adhoc_main_export(int argc, char *argv[], char *env[])
 */
 int	adhoc_main_unset(int argc, char *argv[], char *env[])
 {
+	(void)argc;								//Cast for unused warning
 	int		i;
 	int		j;
 	int		len;
@@ -250,6 +253,8 @@ int	adhoc_main_unset(int argc, char *argv[], char *env[])
 */
 int	adhoc_main_env(int argc, char *argv[], char *env[])
 {
+	(void)argc;								//Cast for unused warning
+	(void)argv;								//Cast for unused warning
 	int	i;
 
 	i = -1;
@@ -266,7 +271,7 @@ int	adhoc_main_exit(t_command *commands, char *env[])
 	int	j;
 
 	i = -1;
-	while (++i < toknow[1])	//free loop for memory in the commands[i] arrays
+	while (++i < g_toknow[1])	//free loop for memory in the commands[i] arrays
 	{
 		j = -1;
 		while (++j < MAX_ENTRY)	//free loop for memory in the commands[i].arrays strings

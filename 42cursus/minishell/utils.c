@@ -6,12 +6,14 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/25 15:55:31 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/29 23:40:00 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "global.h"
 #include "functions.h"
+
+extern int g_toknow[2];
 
 /*
 */
@@ -359,4 +361,68 @@ char	*ft_strchr(const char *str, int c)
 		return (char *)str;
 	}
 	return NULL;// Character not found
+}
+
+/*
+*/
+void	dollar_replace(char *str, char *env[])
+{
+	int		j;
+	int		flag;
+	int		quote;
+	char	env_var[MAX_NAME];
+	char	new_cmd[MAX_NAME];
+
+	ft_memset(new_cmd, '\0', MAX_NAME);//pulisco prima di copiare sopra
+	ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di copiare sopra
+	j = -1;
+	flag = 0;
+	quote = 0;
+	while (str[++j] != '\0')
+	{
+		if (str[j] == '\'')
+			quote++;
+		if (quote%2 == 0)
+		{
+			if (str[j] == '$')
+			{
+				j++;
+				while ((adhoc_isalpha(str[j]) || str[j] == '?') && str[j] != '\0')
+				{
+					if (flag == 0)
+						flag = 1;
+					if (str[j] == '?' && env_var[0] == '\0')
+					{
+						ft_charcat(env_var, str[j]);
+						break;
+					}
+					else if (str[j] == '?')
+						break;
+					else
+						ft_charcat(env_var, str[j]);
+					j++;
+				}
+				if (flag == 1)
+				{
+					if (env_var[0] == '?')
+					{
+						ft_strlcat(new_cmd, ft_itoa(g_toknow[0]), MAX_NAME);
+						j++;
+					}
+					else if (adhoc_getenv(env_var, env))
+						ft_strlcat(new_cmd, adhoc_getenv(env_var, env), MAX_NAME);
+					flag = 0;
+					ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di riutilizzare
+				}
+			}
+			if (str[j] == '$')
+				j--;
+			else
+				ft_charcat(new_cmd, str[j]);
+		}
+		else
+			ft_charcat(new_cmd, str[j]);
+	}
+	ft_memset(str, '\0', MAX_NAME);//pulisco prima di copiare sopra
+	ft_strlcat(str, new_cmd, MAX_NAME);
 }

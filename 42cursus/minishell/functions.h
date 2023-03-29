@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:05 by ecoli             #+#    #+#             */
-/*   Updated: 2023/03/25 15:51:45 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/30 00:36:28 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ size_t		size_num(int n);
 char		*ft_strtok(char *str, const char *delim, char **saveptr);
 size_t		ft_strlcpy(char *dst, const char *src, size_t size);
 char		*ft_strchr(const char *str, int c);
+void		dollar_replace(char *str, char *env[]);
 //builtins.c
 int			do_builtin(const char *path, char *const *argv, char *const *env, t_command **commands);
 //redirections.c
@@ -42,8 +43,8 @@ int			redirect_o(t_command *cmd);
 int			redirect_i(t_command *cmd);
 int			pipe_out(int fd[2]);
 int			pipe_in(int fd[2]);
-int heredoc(t_command *cmd, int a);
-int redirectionin_type(t_command *cmd);
-int redirectionout_type(t_command *cmd);
-void create_pipe(t_command *cmd, int a);
+int			heredoc(t_command *cmd, int a);
+int			redirectionin_type(t_command *cmd);
+int			redirectionout_type(t_command *cmd);
+void		create_pipe(t_command *cmd, int a);
 #endif

@@ -8,6 +8,8 @@ cat >si
 export casa=CASA
 casa=bella
 
+echo ciao1 > TXT <LS |>>LS echo ciao2 ciao3
+echo ciao1 > TXT <LS |>>LS echo ciao2 ciao3
 
 Risolti....................................................
 

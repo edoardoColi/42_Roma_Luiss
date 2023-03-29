@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/25 15:16:30 by eddy             ###   ########.fr       */
+/*   Updated: 2023/03/30 01:03:27 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static void	fill_spaces(char *str);
 static void	trim_spaces(char *str);
 static void	squeez_spaces(char *str);
 static void	expand_cmd(char **str, char *env[]);
-static void	replace_dollar(t_command *command, char *env[]);
+static void	replace_dollar_cmd(t_command *command, char *env[]);
 static void	rem_quotes(t_command *command);
 
-extern int toknow[2];
+extern int g_toknow[2];
 
 /*
 */
@@ -58,8 +58,8 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 			ft_memset(commands[i].rin_and_heredoc[j], '\0', MAX_NAME);
 			ft_memset(commands[i].rout_and_append[j], '\0', MAX_NAME);
 		}
-		//SFARINA inizializza *red_type
-		//SFARINA inizializza fd
+		//SFARINA azzerare redin_type e redout_type?
+		pipe(commands[i].fd);	//MOD inizializza fd
 	}
 	i = -1;
 	while (++i < *n_cmds)
@@ -129,26 +129,18 @@ int		parser(char *cmds, int *n_cmds, char *env[])
 	}
 ///////////////
 	i = -1;
-
-int fd[*n_cmds - 1][2];
-
 	while (++i < *n_cmds)
-	{//SFARINA non ho alcuna relazione tra esecuzione comando prima e dopo (pipe)
-	 commands[i].redin_type=  malloc(sizeof(int) * 50);
-commands[i].redout_type=  malloc(sizeof(int) * 50); //to free!redirectionin_type(&commands[i]);
-	 redirectionout_type(&commands[i]);
-	 redirectionin_type(&commands[i]);
-	replace_dollar(&commands[i], env);
+	{
+		redirectionout_type(&commands[i]);	//MOD
+		redirectionin_type(&commands[i]);	//MOD
+		replace_dollar_cmd(&commands[i], env);
 		rem_quotes(&commands[i]);
-		//  create_pipe(commands, i);
-		if (*n_cmds == 1 && commands[i].rout_and_append[0] == NULL)
+		if (*n_cmds == 1 && commands[i].rout_and_append[0] == NULL && commands[i].rin_and_heredoc[0] == NULL)//MOD un solo comando + niente rio rot e cose varie
 			ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
 		else
 			ret = 2;
 		if (ret == 2)	//il comando non e' builtin oppure e' in pipeline
 		{
-			if(fd[i])	 
-			pipe(fd[i]);
 			pid = fork();
 			if (pid == -1){
 				perror("Fail fork\n");
@@ -156,16 +148,14 @@ commands[i].redout_type=  malloc(sizeof(int) * 50); //to free!redirectionin_type
 			}
 			if (pid == 0) //processo figlio
 			{
-			printf("redin :%s\n", commands[i].rin_and_heredoc[0]);
-			printf("redin :%d\n", commands[i].redin_type[0]);
-			if(commands[i].rin_and_heredoc[0])
-			redirect_i(&commands[i]);
-			if(i > 0 && !commands[i].rin_and_heredoc[0])
-			pipe_in(fd[i - 1]);
-			if(commands[i].rout_and_append[0])
-			redirect_o(&commands[i]);
-		 if(i + 1 < *n_cmds && !commands[i].rout_and_append[0] )
-			pipe_out(fd[i]);
+				if(commands[i].rout_and_append[0])						//MOD
+					redirect_o(&commands[i]);							//MOD
+				if(commands[i].rin_and_heredoc[0])						//MOD
+					redirect_i(&commands[i]);							//MOD
+				if(i > 0 && !commands[i].rin_and_heredoc[0])			//MOD
+					pipe_in(commands[i - 1].fd);							//MOD
+				if(i + 1 < *n_cmds && !commands[i].rout_and_append[0] )	//MOD
+					pipe_out(commands[i].fd);									//MOD
 				ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
 				if (ret == 2)	//il comando non e' builtin
 				{
@@ -193,13 +183,14 @@ commands[i].redout_type=  malloc(sizeof(int) * 50); //to free!redirectionin_type
 				while (env[++i])
 					free(env[i]);
 				free(env);
+				rl_clear_history();
 				exit(ret);
 			}
 			else //processo padre
 			{
 				waitpid(pid, &pid_ret, 0);
-				close(fd[i][1]);
-				 unlink("tmp"); //removing tmpfile of heredoc
+				close(commands[i].fd[1]);	//MOD
+				unlink("tmp");				//MOD
 				if (WIFEXITED(pid_ret) && WEXITSTATUS(pid_ret) != 0)//figlio ritorna con exit()
 					ret = WEXITSTATUS(pid_ret);
 				else
@@ -535,7 +526,7 @@ static void	expand_cmd(char **str, char *env[])
 
 /*
 */
-static void	replace_dollar(t_command *command, char *env[])
+static void	replace_dollar_cmd(t_command *command, char *env[])
 {
 	int		i;
 	int		j;
@@ -580,7 +571,7 @@ static void	replace_dollar(t_command *command, char *env[])
 					{
 						if (env_var[0] == '?')
 						{
-							ft_strlcat(new_cmd, ft_itoa(toknow[0]), MAX_NAME);
+							ft_strlcat(new_cmd, ft_itoa(g_toknow[0]), MAX_NAME);
 							j++;
 						}
 						else if (adhoc_getenv(env_var, env))
