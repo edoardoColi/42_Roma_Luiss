@@ -6,37 +6,45 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by eddy              #+#    #+#             */
-/*   Updated: 2023/03/29 23:40:00 by eddy             ###   ########.fr       */
+/*   Updated: 2023/04/01 01:29:16 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "global.h"
 #include "functions.h"
 
-extern int g_toknow[2];
+extern int	g_toknow[2];
 
 /*
+c: Character
+Returns the boolean value of the various logical operators.
+Check if the character passed is a type ot space.
 */
 int	ft_isspace(char c)
 {
-		if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
-			return (1);
-		return (0);
+	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
+		return (1);
+	return (0);
 }
 
 /*
+name: Name of the environment variable
+env: Reference to the environment used
+Return the value of the environment variable,or NULL;
+Extracts the indicated one from the list of environment variables.
 */
 char	*adhoc_getenv(const char *name, char *env[])
 {
 	int	i;
 	int	len;
+
 	len = ft_strlen(name);
 	i = 0;
 	while (env[i] != NULL)
 	{
 		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
 		{
-			return (&(env[i][len+1]));
+			return (&(env[i][len + 1]));
 		}
 		i++;
 	}
@@ -44,14 +52,20 @@ char	*adhoc_getenv(const char *name, char *env[])
 }
 
 /*
+name: Name of the environment variable
+value: String to put in environment variable
+env: Reference to the environment used
+Return 0.
+Modifies the specified environment variable by changing it
+to value, if it doesn't exist is added to the list of environment variable. 
 */
 int	adhoc_setenv(const char *name, char *value, char *env[])
 {
-	int	i;
-	int	j;
-	int	pos;
-	int	len;
-	char tmp[MAX_NAME];
+	int		i;
+	int		j;
+	int		pos;
+	int		len;
+	char	tmp[MAX_NAME];
 
 	pos = -1;
 	len = ft_strlen(name);
@@ -61,11 +75,11 @@ int	adhoc_setenv(const char *name, char *value, char *env[])
 		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
 		{
 			pos = i;
-			break;
+			break ;
 		}
 		i++;
 	}
-	if (pos == -1)//se la variabile d'ambiente non e' presente
+	if (pos == -1)																//If the environment variable is not present
 	{
 		pos = i;
 		i = 0;
@@ -87,10 +101,11 @@ int	adhoc_setenv(const char *name, char *value, char *env[])
 		}
 		tmp[i] = '\0';
 		free(env[pos]);
-		env[pos] = ft_strdup(tmp);//internamente usa una malloc
+		env[pos] = ft_strdup(tmp);												//Internally uses a malloc
 		env[pos + 1] = NULL;
 	}
-	else{//se la variabile d'ambiente e' presente
+	else																		//If the environment variable is not present
+	{
 		i = 0;
 		j = 0;
 		while (name[j] != '\0')
@@ -114,6 +129,10 @@ int	adhoc_setenv(const char *name, char *value, char *env[])
 }
 
 /*
+dst: Destination string
+src: Character
+Return the new dimension of the destination string.
+Concatenates a character to the target string.
 */
 size_t	ft_charcat(char *dst, const char src)
 {
@@ -121,6 +140,7 @@ size_t	ft_charcat(char *dst, const char src)
 
 	dst_len = ft_strlen(dst);
 	dst[dst_len] = src;
+	dst[dst_len + 1] = '\0';
 	return (dst_len + 1);
 }
 
@@ -183,6 +203,9 @@ size_t	ft_strlen(const char *s)
 }
 
 /*
+c: Character
+Returns the boolean value of the various logical operators.
+Check if the character passed is a letter or a number.
 */
 int	adhoc_isalpha(int c)
 {
@@ -206,13 +229,16 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 }
 
 /*
+str: Text string
+Return a string.
+Duplicate of the passed string allocating new memory up to MAX_NAME
 */
 char	*ft_strdup(char *str)
 {
 	int		i;
 	char	*copy;
 
-	copy = (char*) malloc( sizeof(char) *MAX_NAME);
+	copy = (char *) malloc(sizeof(char) * MAX_NAME);
 	if (!copy)
 	{
 		perror("Fail malloc\n");
@@ -238,9 +264,9 @@ Negative numbers must be handled.
 */
 char	*ft_itoa(int n)
 {
-	char	*str;		//Return value
-	size_t	len;		//Size of the number as a string
-	long	n_long;		//We use long to implicitly manage the INT_MIN value
+	char	*str;											//Return value
+	size_t	len;											//Size of the number as a string
+	long	n_long;											//We use long to implicitly manage the INT_MIN value
 
 	n_long = (long) n;
 	len = size_num(n_long);
@@ -257,7 +283,7 @@ char	*ft_itoa(int n)
 	}
 	while (n_long > 0)
 	{
-		str[len] = (n_long % 10) + '0';		//Adding the offset of 0, according to the asci table, we get the number as a char
+		str[len] = (n_long % 10) + '0';						//Adding the offset of 0, according to the asci table, we get the number as a char
 		n_long = n_long / 10;
 		len--;
 	}
@@ -285,6 +311,11 @@ size_t	size_num(int n)
 }
 
 /*
+str: String to parse
+delim: Delimiters
+saveptr: Pointer to tell where to start parse
+Returns the next substring between the given delimiters, or NULL if something fail.
+Copies the next substring delimited by the delimiter to a new string. Memory is allocated for the new string.
 */
 char	*ft_strtok(char *str, const char *delim, char **saveptr)
 {
@@ -294,15 +325,15 @@ char	*ft_strtok(char *str, const char *delim, char **saveptr)
 	char	*result;
 	char	*token;
 
-	if (str == NULL)	// If `str` is NULL, continue parsing from the last saved position
+	if (str == NULL)															//If `str` is NULL, continue parsing from the last saved position
 		str = *saveptr;
 	if (str == NULL || *str == '\0')
 	{
 		*saveptr = NULL;
-		return NULL;
+		return (NULL);
 	}
-	next_delim = ft_strchr(str, *delim);// Find the next delimiter in the string
-	if (next_delim == NULL)// If there are no more delimiters, return the remainder of the string
+	next_delim = ft_strchr(str, *delim);										//Find the next delimiter in the string
+	if (next_delim == NULL)														//If there are no more delimiters, return the remainder of the string
 	{
 		len = ft_strlen(str);
 		result = malloc(len + 1);
@@ -312,25 +343,31 @@ char	*ft_strtok(char *str, const char *delim, char **saveptr)
 		}
 		ft_strlcpy(result, str, len + 1);
 		*saveptr = NULL;
-		return result;
+		return (result);
 	}
 	token_len = next_delim - str;
-	token = malloc(token_len + 1);// Allocate memory for the token and copy it
+	token = malloc(token_len + 1);												//Allocate memory for the token and copy it
 	if (!token)
 	{
 		return (NULL);
 	}
 	ft_strlcpy(token, str, token_len + 1);
-	*saveptr = next_delim + 1;// Update the save pointer and return the token
-	return token;
+	*saveptr = next_delim + 1;													//Update the save pointer and return the token
+	return (token);
 }
 
 /*
+dst: Destination string
+src: Source string
+size: Maximum destination size
+Return the total length of the string tried to create.
 */
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	size_t i;
-	for (i = 0; i < size - 1 && src[i] != '\0'; i++)
+	size_t	i;
+
+	i = -1;
+	while (++i < size - 1 && src[i] != '\0')
 	{
 		dst[i] = src[i];
 	}
@@ -339,7 +376,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	{
 		i++;
 	}
-	return i;
+	return (i);
 }
 
 /*
@@ -348,22 +385,26 @@ For more use "man strchr"
 */
 char	*ft_strchr(const char *str, int c)
 {
-	while (*str != '\0')// Search for the character in the string
+	while (*str != '\0')														// Search for the character in the string
 	{
 		if (*str == c)
 		{
-			return (char *)str;
+			return ((char *)str);
 		}
 		str++;
 	}
-	if (c == '\0')// Check if the character is the null terminator
+	if (c == '\0')																//Check if the character is the null terminator
 	{
-		return (char *)str;
+		return ((char *)str);
 	}
-	return NULL;// Character not found
+	return (NULL);																//Character not found
 }
 
 /*
+str: Text string
+env: Reference to the environment used
+Return none.
+Change the string parts starting with $ ​​as determined by the dictionary of which the environment env.
 */
 void	dollar_replace(char *str, char *env[])
 {
@@ -373,8 +414,8 @@ void	dollar_replace(char *str, char *env[])
 	char	env_var[MAX_NAME];
 	char	new_cmd[MAX_NAME];
 
-	ft_memset(new_cmd, '\0', MAX_NAME);//pulisco prima di copiare sopra
-	ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di copiare sopra
+	ft_memset(new_cmd, '\0', MAX_NAME);											//Clean up before copying over
+	ft_memset(env_var, '\0', MAX_NAME);											//Clean up before copying over
 	j = -1;
 	flag = 0;
 	quote = 0;
@@ -382,7 +423,7 @@ void	dollar_replace(char *str, char *env[])
 	{
 		if (str[j] == '\'')
 			quote++;
-		if (quote%2 == 0)
+		if (quote % 2 == 0)
 		{
 			if (str[j] == '$')
 			{
@@ -394,10 +435,10 @@ void	dollar_replace(char *str, char *env[])
 					if (str[j] == '?' && env_var[0] == '\0')
 					{
 						ft_charcat(env_var, str[j]);
-						break;
+						break ;
 					}
 					else if (str[j] == '?')
-						break;
+						break ;
 					else
 						ft_charcat(env_var, str[j]);
 					j++;
@@ -412,7 +453,7 @@ void	dollar_replace(char *str, char *env[])
 					else if (adhoc_getenv(env_var, env))
 						ft_strlcat(new_cmd, adhoc_getenv(env_var, env), MAX_NAME);
 					flag = 0;
-					ft_memset(env_var, '\0', MAX_NAME);//pulisco prima di riutilizzare
+					ft_memset(env_var, '\0', MAX_NAME);							//Clean up before using again
 				}
 			}
 			if (str[j] == '$')
@@ -423,6 +464,45 @@ void	dollar_replace(char *str, char *env[])
 		else
 			ft_charcat(new_cmd, str[j]);
 	}
-	ft_memset(str, '\0', MAX_NAME);//pulisco prima di copiare sopra
+	ft_memset(str, '\0', MAX_NAME);												//Clean up before copying over
 	ft_strlcat(str, new_cmd, MAX_NAME);
+}
+
+/*
+My own function implementing the original one.
+For more use "man atoi" 
+*/
+int	ft_atoi(const char *str)
+{
+	int					i;
+	int					s;
+	unsigned int		ret;
+
+	s = 1;
+	i = 0;
+	ret = 0;
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
+		|| str[i] == '\f' || str[i] == '\r' || str[i] == ' ')	//Are the various types of spaces
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			s = -1;
+		i++;
+	}
+	while (ft_isdigit(str[i]))
+	{
+		ret = ret * 10 + (str[i] - 48);							//Subtracting the offset of 0, according to the asci table, we get the char as a number
+		i++;
+	}
+	return (s * ret);
+}
+
+/*
+My own function implementing the original one.
+For more use "man isdigit" 
+*/
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
 }

@@ -6,7 +6,7 @@
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 12:15:39 by ecoli             #+#    #+#             */
-/*   Updated: 2023/03/30 00:41:50 by eddy             ###   ########.fr       */
+/*   Updated: 2023/04/01 01:10:53 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ enum e_io {
 typedef struct s_command
 {
 	char	**args;
-	char	**rin_and_heredoc;	// < e <<
-	char	**rout_and_append;	// > e >>
-	int		redin_type[MAX_ENTRY];	//per ricordare quale append a quale override
-	int		redout_type[MAX_ENTRY];	//per ricordare quale file e quale heredoc
-	int		fd[2];
+	char	**rin_and_heredoc;			//Store < e <<
+	char	**rout_and_append;			//Store > e >>
+	int		redin_type[MAX_ENTRY];		//MOD per ricordare quale append a quale override
+	int		redout_type[MAX_ENTRY];		//MOD per ricordare quale file e quale heredoc
+	int		fd[2];						//File descriptors for pipe
 }	t_command;
 
 #endif

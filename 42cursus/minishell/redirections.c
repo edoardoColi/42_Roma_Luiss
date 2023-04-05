@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/02 04:14:26 by s.farina          #+#    #+#             */
+/*   Updated: 2023/03/31 04:22:51 by eddy             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "global.h"
 #include "functions.h"
 
@@ -18,10 +30,10 @@ static void	ft_putstr_fd(char *s, int fd)
 
 int check_in(t_command *cmd)
 {
-   int  a;
-   a = 0;
-   while(cmd->rin_and_heredoc[a])
-   {
+	int  a;
+	a = 0;
+	while(cmd->rin_and_heredoc[a])
+	{
 		if(cmd->redin_type[a] == 0)
 		{
 			if(access(cmd->rin_and_heredoc[a] , R_OK  < 0))
