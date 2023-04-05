@@ -155,7 +155,7 @@ int	parser(char *cmds, int *n_cmds, char *env[])
 			else																//Parent process
 			{
 				close(commands[i].fd[0]);
-				close(commands[i].fd[1]);	//MOD closing both end of the pipe
+				close(commands[i].fd[1]);	//MOD closing both end of the pip
 				waitpid(pid, &pid_ret, 0);
 				unlink("tmp");				//MOD
 				if (WIFEXITED(pid_ret) && WEXITSTATUS(pid_ret) != 0)			//Child returns with exit()

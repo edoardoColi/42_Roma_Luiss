@@ -71,7 +71,7 @@ int	main(int argc, char *argv[], char *envp[])
 	adhoc_setenv("SHLVL", tmp, my_env);											//I change the environment variable shell level (SHLVL)
 	free(tmp);
 	in_line = readline(ps1);													//LEAKS Readline is null when is pressed ctrl-D (EOF), so we exit the while
-	while (in_line != NULL)									
+	while (in_line != NULL)
 	{
 		if (!is_empty(in_line))
 		{
@@ -180,7 +180,7 @@ static void	do_ps1(char *ps1, size_t len, char *env[])
 	if (g_toknow[0] == 0)
 		i += insert_ps1(ps1, i + 1, "\U0001F607");				//Emoji angel face
 	else
-		i += insert_ps1(ps1, i + 1, "\U0001F608");				//Emoji devil face 
+		i += insert_ps1(ps1, i + 1, "\U0001F608");				//Emoji devil face
 	i += insert_ps1(ps1, i + 1, "\033[1;32m");					//Setup bold and green color
 	j = -1;
 	while (++i < len && user[++j] != '\0')
