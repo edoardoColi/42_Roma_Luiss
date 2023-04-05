@@ -64,7 +64,8 @@ int	parser(char *cmds, int *n_cmds, char *env[])
 			ft_memset(commands[i].rout_and_append[j], '\0', MAX_NAME);
 		}
 		//TODO inizzializzare redin_type e redout_type
-		// pipe(commands[i].fd);	//MOD inizializza fd
+		if(i < *n_cmds)
+			pipe(commands[i].fd);	//MOD inizializza fd
 	}
 	i = -1;
 	while (++i < *n_cmds)
@@ -95,8 +96,8 @@ int	parser(char *cmds, int *n_cmds, char *env[])
 	i = -1;
 	while (++i < *n_cmds)
 	{
-		// redirectionout_type(&commands[i]);	//MOD
-		// redirectionin_type(&commands[i]);	//MOD
+		redirectionout_type(&commands[i]);	//MOD
+		redirectionin_type(&commands[i]);	//MOD
 		replace_dollar_cmd(&commands[i], env);
 		rem_quotes(&commands[i]);
 		// if (*n_cmds == 1 && commands[i].rout_and_append[0] == NULL && commands[i].rin_and_heredoc[0] == NULL)	//MOD un solo comando + niente rio rot e cose varie
@@ -113,14 +114,14 @@ int	parser(char *cmds, int *n_cmds, char *env[])
 			}
 			if (pid == 0)														//Child process
 			{
-				// if(commands[i].rout_and_append[0])						//MOD
-				// 	redirect_o(&commands[i]);							//MOD
-				// if(commands[i].rin_and_heredoc[0])						//MOD
-				// 	redirect_i(&commands[i]);							//MOD
-				// if(i > 0 && !commands[i].rin_and_heredoc[0])			//MOD
-				// 	pipe_in(commands[i - 1].fd);						//MOD
-				// if(i + 1 < *n_cmds && !commands[i].rout_and_append[0] )	//MOD
-				// 	pipe_out(commands[i].fd);							//MOD
+				if(commands[i].rout_and_append[0])						//MOD
+					redirect_o(&commands[i]);							//MOD
+				if(commands[i].rin_and_heredoc[0])						//MOD
+					redirect_i(&commands[i]);							//MOD
+				if(i > 0 && !commands[i].rin_and_heredoc[0])			//MOD
+					pipe_in(commands[i].fd);						//MOD
+				if(i + 1 < *n_cmds && !commands[i].rout_and_append[0] )	//MOD
+					pipe_out(commands[i + 1].fd);							//MOD now the output is redirected to the next pipe
 				ret = do_builtin(commands[i].args[0], commands[i].args, env, &commands);
 				if (ret == 2)													//Command is not builtin
 				{
@@ -153,9 +154,10 @@ int	parser(char *cmds, int *n_cmds, char *env[])
 			}
 			else																//Parent process
 			{
+				close(commands[i].fd[0]);
+				close(commands[i].fd[1]);	//MOD closing both end of the pip
 				waitpid(pid, &pid_ret, 0);
-				// close(commands[i].fd[1]);	//MOD
-				// unlink("tmp");				//MOD
+				unlink("tmp");				//MOD
 				if (WIFEXITED(pid_ret) && WEXITSTATUS(pid_ret) != 0)			//Child returns with exit()
 					ret = WEXITSTATUS(pid_ret);
 				else
@@ -198,7 +200,7 @@ int	fill_cmd(t_command *to_fill, int n_cmd, char *in_line)
 	int			quotes_rep;
 	char		arg_tmp[MAX_NAME];
 	char		cmd[MAX_CMD];
-	
+
 
 	tmp[0] = -1;
 	quote_rep = 0;
@@ -286,7 +288,7 @@ int	fill_cmd(t_command *to_fill, int n_cmd, char *in_line)
 }
 
 /*
-str: Reference to the string 
+str: Reference to the string
 Return 0.
 Run the sequence of fill-trim-squeez of the string to be parsed later in the program
 */
@@ -299,7 +301,7 @@ static int	setup_spaces(char *str)
 }
 
 /*
-str: Reference to the string 
+str: Reference to the string
 Return none.
 Adds spaces befor and after >, >>, <, <<, |
 */
@@ -352,7 +354,7 @@ static void	fill_spaces(char *str)
 }
 
 /*
-str: Reference to the string 
+str: Reference to the string
 Return none.
 Joins consecutive spaces
 */
@@ -407,14 +409,14 @@ static void	trim_spaces(char *str)
 		i++;
 	}
 	if (str[k - 2] == ' ' && str[k - 1] == '|')
-		str[k - 2] = '\0';	
+		str[k - 2] = '\0';
 	if (str[k - 1] == '|')
 		str[k - 1] = '\0';
 	str[k] = '\0';
 }
 
 /*
-str:  Reference to the string 
+str:  Reference to the string
 Return none.
 Deletes spaces after >, >>, <, <<
 */
@@ -480,7 +482,7 @@ void	expand_cmd(char **str, char *env[])
 		ft_charcat(full_path, '/');
 		ft_strlcat(full_path, cmd, MAX_NAME);
 		if (access(full_path, X_OK) == 0)										//Check if the command exists in this directory
-		{	
+		{
 			*str = ft_strdup(full_path);										//If it does, replace the command string with the full path
 			free(dir);
 			break;
