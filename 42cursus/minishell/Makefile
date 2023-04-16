@@ -1,38 +1,72 @@
-# Program for compiling C programs
-CC		= gcc
-# Extra flags to give to the C preprocessor and programs that use it
-CPPFLAGS= -I .
-# Extra flags to give to the processor C compiler
-CFLAGS	= -g -Wall -Werror -Wextra
-# Optimization flag to give to the processor C compiler
-COPTFLAGS	= -O3
-# Library flags or names given to compilers when they are supposed to invoke the linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to LDLIBS. Non-library linker flags, such as-L, should go in the LDFLAGS variable
-LDLIBS	= -lreadline
-
+CC	=	gcc
+CFLAGS	=	-g -Wall -Werror -Wextra
+LDLIBS	=	-lreadline
+INCS	=	global.h \
+				executor.h \
+				parser.h \
+				lexer.h \
+				glob.h \
+				redirection.h
+SRCS	=	signals2_0.c \
+				main.c \
+				free_structs.c \
+				init.c \
+				prompt.c \
+				lexer.c \
+				lexer_splitter.c \
+				lexer_syntax.c \
+				parser.c \
+				ps_utils.c \
+				ps_write.c \
+				ps_utils_2.c \
+				ps_flags_red.c \
+				executor.c \
+				ft_execv.c \
+				pipe.c \
+				redirpipe.c \
+				redir.c \
+				executor_process.c \
+				expander.c \
+				expander_utils.c \
+				redirector.c \
+				unset.c \
+				cd.c \
+				echo.c \
+				env.c \
+				pwd.c \
+				exit.c \
+				export.c \
+				export2.c \
+				export3.c \
+				export_utils2.c \
+				red_exec.c \
+				redirection.c
+LIBFT	=	./libft/libft.a
+OBJS	=	$(SRCS:.c=.o)
+NAME	=	minishell
 #
-SRC		= main.c \
-			utils.c \
-			analyzer.c \
-			parser.c \
-			builtins.c \
-			redirections.c
-OBJ		= $(SRC:.c=.o)
-NAME	= minishell
-#
-.PHONY: all clean fclean cleanall re
+.PHONY: all clean fclean re
 
 .o: .c
-	$(CC) -c $(CFLAGS) $(COPTFLAGS) $(CPPFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) $< -o $@
 
-all: $(NAME)
+all:$(NAME)
 
-$(NAME): $(OBJ) global.h functions.h
-	$(CC) $(CFLAGS) $(COPTFLAGS) -o $@ $(OBJ) $(LDLIBS)
+$(LIBFT):
+		make -C libft/
+
+$(OBJS): $(INCS)
+
+$(NAME): $(OBJS) $(LIBFT)
+		$(CC) $(CFLAGS) $(SRCS) $(LIBFT) $(LDLIBS) -o $(NAME)
 
 clean:
-	rm -f *~ $(OBJ)
+	make clean -C libft/
+	rm -f *~ $(OBJS)
 
-fclean: clean
+fclean:
+	make fclean -C libft/
+	rm -f *~ $(OBJS)
 	rm -f $(NAME)
 
 re: fclean all
