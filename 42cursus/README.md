@@ -20,7 +20,13 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |[push_swap](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/push_swap/en.subject.pdf)|83% :heavy_check_mark:|1855 XP|C,Make|
 |[Exam Rank 02](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_02)|:heavy_check_mark:||C|
 |||||
-|[minishell](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/minishell/en.subject.pdf)|In Progress :fast_forward:|2814 XP|C,Make|
+|[minishell](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/minishell/en.subject.pdf)|101% :heavy_check_mark:|2814 XP|C,Make|
 |[Philosophers](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Philosophers/en.subject.pdf)|100% :heavy_check_mark:|3360 XP|C,Make|
 |[Exam Rank 03](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_03)|In Progress :fast_forward:||C|
+|||||
+|[NetPractice](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/NetPractice)|In Progress :fast_forward:|3160 XP||
+|[miniRT](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/miniRT)|In Progress :fast_forward:|5775 XP|C,Make|
+|[cub3d](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/cub3d)|Asap|5775 XP||
+|[CPP Module](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/CPP_Module)|In Progress :fast_forward:|9660 XP|C++,Make|
+|[Exam Rank 04](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_04)|Asap||C|
 |||||
