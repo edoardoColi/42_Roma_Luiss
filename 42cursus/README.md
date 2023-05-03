@@ -26,7 +26,6 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |||||
 |[NetPractice](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/NetPractice)|In Progress :fast_forward:|3160 XP||
 |[miniRT](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/miniRT)|In Progress :fast_forward:|5775 XP|C,Make|
-|[cub3d](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/cub3d)|Asap|5775 XP||
 |[CPP Module](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/CPP_Module)|In Progress :fast_forward:|9660 XP|C++,Make|
 |[Exam Rank 04](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_04)|In Progress :fast_forward:||C|
 |||||
