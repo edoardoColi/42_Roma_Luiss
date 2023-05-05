@@ -1,7 +1,7 @@
 OS		= $(shell uname)
 ifeq ($(OS), Linux)
 	MLXDIR	= ./minilibx-linux
-else #leva la parte non linux tanto non funziona
+else #Vedi miniRT
 	MLXDIR	= ./?iOS?
 endif
 MLXNAME	= mlx
