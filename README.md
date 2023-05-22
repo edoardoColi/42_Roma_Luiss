@@ -1,7 +1,7 @@
 # 42_Roma_Luiss
 <img src=https://github.com/edoardoColi/42_Roma_Luiss/blob/edoardoColi/.Logo_42.jpg>  
 
-Per maggioni informazioni visitare [42 Roma Luiss](https://42roma.it/).
+Per maggiori informazioni visitare [42 Roma Luiss](https://42roma.it/).
 
 Link Utili:  
 Il mio percorso delle [Piscine C](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/C_Piscine).  

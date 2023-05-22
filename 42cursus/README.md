@@ -4,7 +4,7 @@ Marzo 2022 - now
 *+(Firenze, Via del Tiratoio 1)*  
   
 **Tip:**  
-Per evitare di scaricare tutta la reporitorie si puo' utilizzare *subversion* tramite il comando:  
+Per evitare di scaricare tutta la repository si puo' utilizzare *subversion* tramite il comando:  
 `svn checkout https://github.com/edoardoColi/42_Roma_Luiss/trunk/42cursus/<project>`  
 e specificare la cartella che si vuole al posto di \<project\>.
 |Progetto|Percentuale Completamento|Valore|Linguaggio|
