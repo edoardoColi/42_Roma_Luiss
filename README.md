@@ -1,5 +1,5 @@
 # 42_Roma_Luiss
-<img src=https://42roma.it/wp-content/themes/42roma/assets/images/loghi/logo_42roma.svg>  
+<img src=https://www.42network.org/wp-content/uploads/2021/04/42-Roma@3x-420x140.png>  
 
 Per maggiori informazioni visitare [42 Roma Luiss](https://42roma.it/).
 
