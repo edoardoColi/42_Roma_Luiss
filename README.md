@@ -1,5 +1,5 @@
 # 42_Roma_Luiss
-<img src=https://github.com/edoardoColi/42_Roma_Luiss/blob/edoardoColi/.Logo_42.jpg>  
+<img src=https://42roma.it/wp-content/themes/42roma/assets/images/loghi/logo_42roma.svg>  
 
 Per maggiori informazioni visitare [42 Roma Luiss](https://42roma.it/).
 
