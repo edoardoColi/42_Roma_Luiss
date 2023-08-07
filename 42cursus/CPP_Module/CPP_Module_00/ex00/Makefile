@@ -12,7 +12,7 @@ SRC		= megaphone.cpp
 OBJ		= $(SRC:.cpp=.o)
 NAME	= megaphone
 #
-.PHONY: all clean fclean cleanall re
+.PHONY: all clean fclean re
 
 .o: .cpp
 	$(CC) -c $(CFLAGS) $(COPTFLAGS) $(CPPFLAGS) $< -o $@

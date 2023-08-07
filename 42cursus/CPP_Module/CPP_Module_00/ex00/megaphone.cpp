@@ -12,18 +12,16 @@
 
 #include <iostream>
 
-using namespace std;
-
 /*
 */
 int main(int argc, char* argv[])
 {
 	int	i;
 	int	j;
-	string str;
+	std::string str;
 
 	if(argc == 1){
-		cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << endl;
+		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << std::endl;
 	} else {
 		i = 1;
 		while(argv[i])
@@ -32,14 +30,14 @@ int main(int argc, char* argv[])
 			j = 0;
 			while(j < str.length()){
 				if(isalpha(str[j]))
-					cout << (char)toupper(str[j]);
+					std::cout << (char)toupper(str[j]);
 				else
-					cout << str[j];
+					std::cout << str[j];
 				j++;
 			}
 		i++;
 		}
-	cout << endl;
+	std::cout << std::endl;
 	}
 	return 0;
 }

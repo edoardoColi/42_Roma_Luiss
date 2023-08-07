@@ -29,10 +29,10 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |[CPP Module](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/CPP_Module)|In Progress :fast_forward:|9660 XP|C++,Make|
 |[Exam Rank 04](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_04)|:heavy_check_mark:||C|
 |||||
-|[Inception](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Inception)|Asap|10042 XP||
-|[webserv](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/webserv)|Asap|21630 XP||
+|[Inception](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Inception)|In Progress :fast_forward:|10042 XP|Dokerfile,Make|
+|[webserv](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/webserv)|In Progress :fast_forward:|21630 XP||
 |[ft_irc](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_irc)|Asap|21630 XP||
-|[Exam Rank 05](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_05)|Asap||C|
+|[Exam Rank 05](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_05)|In Progress :fast_forward:||C++|
 |||||
 |[ft_transcendence](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_transcendence)|Asap|24360 XP||
 |[Exam Rank 06](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_06)|Asap||C|
