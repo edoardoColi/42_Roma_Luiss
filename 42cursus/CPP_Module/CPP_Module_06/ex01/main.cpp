@@ -1,50 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   WrongCat.cpp                                       :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 04:14:26 by ecoli             #+#    #+#             */
-/*   Updated: 2023/04/02 17:40:15 by eddy             ###   ########.fr       */
+/*   Updated: 2023/04/02 18:51:06 by eddy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "WrongCat.hpp"
+#include "Serializer.hpp"
 
-//Functions
 /*
 */
-void	WrongCat::makeSound() const
+int main(int argc, char *argv[]) 
 {
-	std::cout << "~ ~ ~ Miaoo! ~ ~ ~" << std::endl;
+	Data* data;
+	uintptr_t rawData;
+	Data* retData;
+
+	data = new Data;
+	data->n = 42;
+
+	std::cout << "Data             : " << data << "("<< data->n << ")"<< std::endl;
+	rawData = Serializer::serialize(data);
+	std::cout << "Raw data         : " << rawData << std::endl;
+	retData = Serializer::deserialize(rawData);
+	std::cout << "Deserialized data: " << retData << std::endl;
+	std::cout << (data == retData) << std::endl;
+
+	delete data;
+	return 0;
 }
-
-//Constructors
-WrongCat::WrongCat()
-{
-	this->type = "WrongCat";
-	std::cout << "Constructor called(WrongCat)" << std::endl;
-}
-
-WrongCat::WrongCat(const WrongCat &wrongCat)
-{
-	*this = wrongCat;
-	return;
-}
-
-WrongCat	&WrongCat::operator = (const WrongCat &wrongCat)
-{
-	this->type = wrongCat.type;
-	return (*this);
-}
-
-//Destructor
-WrongCat::~WrongCat()
-{
-	std::cout << "Destructor called(WrongCat)" << std::endl;
-}
-
-//ters
-
-//Getters

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   WrongCat.cpp                                       :+:      :+:    :+:   */
+/*   Serializer.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eddy <eddy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,41 +10,45 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "WrongCat.hpp"
+#include "Serializer.hpp"
 
 //Functions
 /*
 */
-void	WrongCat::makeSound() const
+uintptr_t Serializer::serialize(Data *ptr) 
 {
-	std::cout << "~ ~ ~ Miaoo! ~ ~ ~" << std::endl;
+	return reinterpret_cast<uintptr_t>(ptr);	//reinterpret cast is used to convert one pointer type to another, even if the type are unrelated
+}
+
+/*
+*/
+Data* Serializer::deserialize(uintptr_t raw) 
+{
+	return reinterpret_cast<Data*>(raw);	//reinterpret cast is used to convert one pointer type to another, even if the type are unrelated
 }
 
 //Constructors
-WrongCat::WrongCat()
+Serializer::Serializer()
 {
-	this->type = "WrongCat";
-	std::cout << "Constructor called(WrongCat)" << std::endl;
+	std::cout << "Constructor called(Serializer)" << std::endl;
 }
 
-WrongCat::WrongCat(const WrongCat &wrongCat)
+Serializer::Serializer(const Serializer &serializer)
 {
-	*this = wrongCat;
-	return;
+	*this = serializer;
 }
 
-WrongCat	&WrongCat::operator = (const WrongCat &wrongCat)
+Serializer	&Serializer::operator = (const Serializer &serializer)
 {
-	this->type = wrongCat.type;
-	return (*this);
+	return *this;
 }
 
 //Destructor
-WrongCat::~WrongCat()
+Serializer::~Serializer()
 {
-	std::cout << "Destructor called(WrongCat)" << std::endl;
+	std::cout << "Destructor called(Serializer)" << std::endl;
 }
 
-//ters
+//Setters
 
 //Getters
