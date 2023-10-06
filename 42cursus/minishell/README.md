@@ -1,4 +1,4 @@
-# miniscHELL
+# minisHELL
 Implementazione parziale/incompleta. (Vedere i TODO per le parti mancanti)  
   
 <img src=https://github.com/edoardoColi/42_Roma_Luiss/blob/edoardoColi/42cursus/minishell/Usefull_Facts.jpg>  
