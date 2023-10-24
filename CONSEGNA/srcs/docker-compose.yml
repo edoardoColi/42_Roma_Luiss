@@ -1,0 +1,64 @@
+#TODO a me funziona solo con 3 non 3.8 come valerio
+version: '3'
+
+services:
+
+  # Servizio Nginx: Web Server e Proxy Inverso
+  nginx:
+    container_name: nginx  # Nome del container per il servizio Nginx
+    build: ./requirements/nginx  # Utilizza il Dockerfile nella directory ./requirements/nginx
+    ports:
+      - 443:443  # Mappa la porta 443 del host alla porta 443 del container (HTTPS)
+    depends_on:
+      - wordpress
+    networks:
+      - DockerNetwork  # Collega il servizio alla rete "network"
+    volumes:
+      - DataWordPress:/var/www/html  # Monta il volume "wordpress_data" nella directory /var/www/html del container
+    restart: always  # Riavvia sempre il container in caso di errore o riavvio del sistema
+
+
+  # Servizio MariaDB: Database
+  mariadb:
+    container_name: mariadb  # Nome del container per il servizio MariaDB
+    build: ./requirements/mariadb  # Utilizza il Dockerfile nella directory ./requirements/mariadb
+    volumes:
+      - DataMariaDB:/var/lib/mysql  # Monta il volume "mariadb_data" nella directory /var/lib/mysql del container
+    networks:
+      - DockerNetwork  # Collega il servizio alla rete "network"
+    env_file:
+      - ./.env  # Carica le variabili d'ambiente dal file ./.env nella root
+    restart: always  # Riavvia sempre il container in caso di errore o riavvio del sistema
+
+
+  # Servizio WordPress: Applicazione Web
+  wordpress:
+    container_name: wordpress  # Nome del container per il servizio WordPress
+    depends_on:
+      - mariadb  # Dipende dal servizio MariaDB (deve essere avviato prima)
+    build: ./requirements/wordpress
+    networks:
+      - DockerNetwork  # Collega il servizio alla rete "network"
+    volumes:
+      - DataWordPress:/var/www/html  # Monta il volume "wordpress_data" nella directory /var/www/html del container
+    env_file:
+      - ./.env  # Carica le variabili d'ambiente dal file ./.env nella root
+    restart: always  # Riavvia sempre il container in caso di errore o riavvio del sistema
+
+volumes:
+  DataMariaDB:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ecoli/data/mariadb_data
+  DataWordPress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ecoli/data/wordpress_data
+
+networks:
+  DockerNetwork:
+    driver: bridge
