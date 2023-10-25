@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  nginx:
+    container_name: nginx                     #container name for the service
+    build: ./requirements/nginx               #use the Dockerfile in the specified directory
+    ports:
+      - "4443:443"                             #mapping port 'left' of the host to port 'right' of the container
+    volumes:
+      - DataWordPress:/var/WordPress:ro
+    env_file:                                 #files containing environment variables that will be included
+      - .env
+    depends_on:
+      - wordpress
+    networks:
+      - DockerNetwork                         #ensure that hostname modifications made within a Docker container are accessible from other containers on the same Docker network
+    restart: always
+            # no: This means that the container will not be restarted automatically under any circumstances.
+            # always: This means that the container will always be restarted, regardless of the exit status.
+            # on-failure: This means that the container will only be restarted if it exits with a non-zero exit status (i.e., it fails).
+            # unless-stopped: This means that the container will restart unless it is explicitly stopped by a user.
+
+  wordpress:
+    container_name: wordpress                 #container name for the service
+    build: ./requirements/wordpress           #use the Dockerfile in the specified directory
+    volumes:
+      - DataWordPress:/var/WordPress:rw
+    env_file:                                 #files containing environment variables that will be included
+      - .env
+    depends_on:
+      - mariadb                               #it depends on another service (mariadb), which must be started first
+    networks:
+      - DockerNetwork                         #ensure that hostname modifications made within a Docker container are accessible from other containers on the same Docker network
+    restart: always
+
+  mariadb:
+    container_name: mariadb                   #container name for the service
+    build: ./requirements/mariadb             #use the Dockerfile in the specified directory
+    volumes:
+      - DataMariaDB:/var/MariaDB:rw
+    env_file:                                 #files containing environment variables that will be included
+      - .env
+    networks:
+      - DockerNetwork                         #ensure that hostname modifications made within a Docker container are accessible from other containers on the same Docker network
+    restart: always
+
+networks:
+  # You can define custom networks here if needed.
+  DockerNetwork:
+    driver: bridge
+            # Bridge (default): is the default and creates a private internal network on the host.
+            # Host: allows a container to share the network namespace with the host, effectively bypassing any network isolation.
+            # Overlay: is designed for multi-host deployments.
+            # Macvlan: enables containers to have their own unique MAC addresses and appear as separate physical devices on the network.
+            # Calico: is a popular networking and network security solution for container orchestration platforms like Kubernetes.
+            # ...
+
+volumes:
+  # You can define named volumes here if needed, you can use:
+  # Named Volumes below, or Bind Mounts that allow you to mount a directory from the host machine into the container(usable directly in che services parameters)
+  DataMariaDB:
+  DataWordPress:
