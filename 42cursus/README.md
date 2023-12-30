@@ -32,7 +32,7 @@ e specificare la cartella che si vuole al posto di \<project\>.
 |[Inception](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Inception/en.subject.pdf))|105% :heavy_check_mark:|10042 XP|Doker,Make|
 |[webserv](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/webserv)|In Progress :fast_forward:|21630 XP|C++,Make|
 |[ft_irc](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_irc)|Asap|21630 XP||
-|[Exam Rank 05](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_05)|In Progress :fast_forward:||C++|
+|[Exam Rank 05](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_05)|:heavy_check_mark:||C++|
 |||||
 |[ft_transcendence](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_transcendence)|In Progress :fast_forward:|24360 XP|NestJS,JavaScript,Docker|
 |[Exam Rank 06](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_06)|In Progress :fast_forward:||C|
