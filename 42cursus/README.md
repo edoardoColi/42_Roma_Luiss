@@ -9,7 +9,7 @@ Per evitare di scaricare tutta la repository si puo' utilizzare *subversion* tra
 e specificare la cartella che si vuole al posto di \<project\>.
 |Progetto|Percentuale Completamento|Valore|Linguaggio|
 |:------:|:-----------------------:|:----:|:--------:|
-|[Libft](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Libft/en.subject.pdf)| 125%: heavy_check_mark:|462 XP|C,Make|
+|[Libft](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Libft/en.subject.pdf)| 125% :heavy_check_mark:|462 XP|C,Make|
 |||||
 |[Born2beroot](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Born2beroot/en.subject.pdf)|115% :heavy_check_mark:|577 XP|Shell|
 |[ft_printf](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_printf/en.subject.pdf)|100% :heavy_check_mark:|882 XP|C,Make|
