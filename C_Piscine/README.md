@@ -3,9 +3,14 @@ Dicembre 2021
 *Roma, Via Marsala 29H*  
   
 **Tip:**  
-Per evitare di scaricare tutta la reporitorie si puo' utilizzare *subversion* tramite il comando:  
-`svn checkout https://github.com/edoardoColi/42_Roma_Luiss/trunk/C_Piscine/<project>`  
+Per evitare di scaricare tutta la repository si puo' utilizzare *subversion* tramite il comando:
+```
+svn checkout https://github.com/edoardoColi/42_Roma_Luiss/trunk/C_Piscine/<project>
+```
 e specificare la cartella che si vuole al posto di \<project\>.
+Serve installare `git`, `git-svn` e `git-lfs`.  
+**Sad Update**
+https://github.blog/2023-01-20-sunsetting-subversion-support/
 |Esercizio|Percentuale Completamento|Linguaggio|
 |:------:|:-----------------------:|:--------:|
 |[Shell 00](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/C_Piscine/shell_00/it.subject.pdf)|100%|Shell|

@@ -4,9 +4,14 @@ Marzo 2022 - now
 *+(Firenze, Via del Tiratoio 1)*  
   
 **Tip:**  
-Per evitare di scaricare tutta la repository si puo' utilizzare *subversion* tramite il comando:  
-`svn checkout https://github.com/edoardoColi/42_Roma_Luiss/trunk/42cursus/<project>`  
+Per evitare di scaricare tutta la repository si puo' utilizzare *subversion* tramite il comando:
+```
+svn checkout https://github.com/edoardoColi/42_Roma_Luiss/trunk/42cursus/<project>
+```
 e specificare la cartella che si vuole al posto di \<project\>.
+Serve installare `git`, `git-svn` e `git-lfs`.  
+**Sad Update**
+https://github.blog/2023-01-20-sunsetting-subversion-support/
 |Progetto|Percentuale Completamento|Valore|Linguaggio|
 |:------:|:-----------------------:|:----:|:--------:|
 |[Libft](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Libft/en.subject.pdf)| 125% :heavy_check_mark:|462 XP|C,Make|
