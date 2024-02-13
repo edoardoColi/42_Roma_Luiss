@@ -42,6 +42,8 @@ resolve:
 
 # Define a help target to display available Makefile targets
 help:
+	@echo "Check if file .env is present or if it was ignored by git"
+	@echo ""
 	@echo "Available Makefile targets:"
 	@echo "  build    : Build Docker images using Docker Compose"
 	@echo "  clean    : Clean up containers and their networks and volumes"

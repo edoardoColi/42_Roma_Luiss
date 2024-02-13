@@ -35,10 +35,9 @@ https://github.blog/2023-01-20-sunsetting-subversion-support/
 |[Exam Rank 04](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_04)|:heavy_check_mark:||C|
 |||||
 |[Inception](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Inception/en.subject.pdf)|105% :heavy_check_mark:|10042 XP|Doker,Make|
-|[webserv](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/webserv)|In Progress :fast_forward:|21630 XP|C++,Make|
-|[ft_irc](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_irc)|Asap|21630 XP||
+|[webserv](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/webserv/en.subject.pdf)|In Progress :fast_forward:|21630 XP|C++,Make|
 |[Exam Rank 05](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_05)|:heavy_check_mark:||C++|
 |||||
-|[ft_transcendence](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_transcendence)|In Progress :fast_forward:|24360 XP|NestJS,JavaScript,Docker|
+|[ft_transcendence](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_transcendence/en.subject.pdf)|In Progress :fast_forward:|24360 XP|NestJS,JavaScript,Docker|
 |[Exam Rank 06](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_06)|In Progress :fast_forward:||C|
 |||||
