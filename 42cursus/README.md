@@ -35,7 +35,7 @@ https://github.blog/2023-01-20-sunsetting-subversion-support/
 |[Exam Rank 04](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_04)|:heavy_check_mark:||C|
 |||||
 |[Inception](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Inception/en.subject.pdf)|105% :heavy_check_mark:|10042 XP|Doker,Make|
-|[webserv](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/webserv/en.subject.pdf)|In Progress :fast_forward:|21630 XP|C++,Make|
+|[webserv](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/webserv/en.subject.pdf)|100% :heavy_check_mark:|21630 XP|C++,Make|
 |[Exam Rank 05](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_05)|:heavy_check_mark:||C++|
 |||||
 |[ft_transcendence](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_transcendence/en.subject.pdf)|In Progress :fast_forward:|24360 XP|NestJS,JavaScript,Docker|
