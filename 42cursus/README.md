@@ -1,7 +1,6 @@
 # 42cursus
 Marzo 2022 - now  
 *Roma, Via Marsala 29H*  
-*+(Firenze, Via del Tiratoio 1)*  
   
 **Tip:**  
 Per evitare di scaricare tutta la repository si puo' utilizzare *subversion* tramite il comando:
