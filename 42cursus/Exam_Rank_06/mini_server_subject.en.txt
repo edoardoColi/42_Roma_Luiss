@@ -1,6 +1,6 @@
 Assignment name  : mini_serv
 Expected files   : mini_serv.c
-Allowed functions: write, close, select, socket, accept, listen, send, recv, bind, strstr, malloc, realloc, free, calloc, bzero, atoi, sprintf, strlen, exit, strcpy, strcat, memset
+Allowed functions: write, close, select, socket, accept, listen, send, recv, bind, strstr, malloc, realloc, free, calloc, bzero, atoi, sprintf, strlen, exit, strcpy, strcat, memset, htons, htonl
 --------------------------------------------------------------------------------
 
 Write a program that will listen for client to connect on a certain port on 127.0.0.1 and will let clients to speak with each other
@@ -23,9 +23,8 @@ When a client connect to the server:
 
 clients must be able to send messages to your program.
 - message will only be printable characters, no need to check
-- a single message always end with a \n
-- a single message will never be longer than 4096 characters
-- when the server receive a message, it must resend it to all the other client with "client %d: " before the message
+- a single message can contain multiple \n
+- when the server receive a message, it must resend it to all the other client with "client %d: " before every line!
 
 When a client disconnect from the server:
 - a message is sent to all the client that was connected to the server: "server: client %d just left\n"
@@ -33,8 +32,6 @@ When a client disconnect from the server:
 Memory or fd leaks are forbidden
 
 To help you, you will find the file main.c with the beginning of a server and maybe some useful functions. (Beware this file use forbidden functions or write things that must not be there in your final program)
-
-You also have a nc executable in the subject folder which only connects to localhost in order to test your server.
 
 Warning our tester is expecting that you send the messages as fast as you can. Don't do un-necessary buffer.
 
