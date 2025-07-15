@@ -37,6 +37,6 @@ https://github.blog/2023-01-20-sunsetting-subversion-support/
 |[webserv](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/webserv/en.subject.pdf)|100% :heavy_check_mark:|21630 XP|C++,Make|
 |[Exam Rank 05](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_05)|:heavy_check_mark:||C++|
 |||||
-|[ft_transcendence](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_transcendence/en.subject.pdf)| 125%:heavy_check_mark:|24360 XP|Django,JavaScript,Docker,Grafana|
+|[ft_transcendence](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/ft_transcendence/en.subject.pdf)| 125% :heavy_check_mark:|24360 XP|Django,JavaScript,Docker,Grafana|
 |[Exam Rank 06](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/42cursus/Exam_Rank_06)|:heavy_check_mark:||C|
 |||||
