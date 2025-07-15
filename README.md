@@ -10,9 +10,9 @@ Il mio [cursus 42](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi
 
 ------------------------------------------------------------
 > [Accesso Intra](https://signin.intra.42.fr/users/sign_in)  
-> [Piattaforma Mulinette](https://moulinette.42roma.it/)  
+> [Piattaforma Mulinette](https://moulinette.42roma.it/)  (INSIDE INTRANET)  
 > [42 XP_calculator](https://42evaluators.com/calculator) (OUT OF SERVICE)  
-> [42 Tools : Calculator, Stats, RNCP](https://42tools.slopez.dev/)  
+> [42 Tools : Calculator, Stats, RNCP](https://42tools.slopez.dev/) (OUT OF SERVICE)  
 > [Compilatore e Debugger Online](https://www.onlinegdb.com/)  
 > [Visualizzatore esecuzione](https://pythontutor.com/)  
 ------------------------------------------------------------
