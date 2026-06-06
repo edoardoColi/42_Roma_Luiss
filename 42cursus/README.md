@@ -1,5 +1,5 @@
 # 42cursus
-Marzo 2022 - now  
+Marzo 2022 - Febbraio 2025  
 *Roma, Via Marsala 29H*  
   
 **Tip:**  

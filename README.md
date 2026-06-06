@@ -1,8 +1,8 @@
 # 42_Roma_Luiss
 <img src=https://42roma.it/wp-content/themes/42roma/assets/images/loghi/logo_42roma.svg>  
+<!-- <img src=.logo.svg>   -->
 
-Per maggiori informazioni visitare [42 Roma Luiss](https://42roma.it/).  
-Ora presente anche a [Firenze](https://42firenze.it/) e [Milano](https://42milano.com/).  
+Ora presente anche a [Firenze](https://42firenze.it/).  
 
 Link Utili:  
 Il mio percorso delle [Piscine C](https://github.com/edoardoColi/42_Roma_Luiss/tree/edoardoColi/C_Piscine).  
